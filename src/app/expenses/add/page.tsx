@@ -6,18 +6,19 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import FormInput from "./components/form-input";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Button from "@mui/material/Button";
+import dayjs from "dayjs";
 
 const AddExpenses = () => {
   const expenseInitialValue = {
     description: "",
     amount: "",
-    date: new Date(),
+    date: dayjs(),
   };
 
   const createExpense = async (values: any, { resetForm }: any) => {
     try {
-      const response = await axios.post("/expenses", values);
-      console.log("Respuesta del servidor:", response);
+      // const response = await axios.post("/expenses", values);
+      console.log(values);
       resetForm();
     } catch (error) {
       console.error("Error al obtener gastos:", error);
@@ -28,7 +29,7 @@ const AddExpenses = () => {
     <div>
       <h1>Ingresar nuevo gasto</h1>
       <Formik initialValues={expenseInitialValue} onSubmit={createExpense}>
-        {({ isSubmitting, values }) => (
+        {({ isSubmitting, values, setFieldValue }) => (
           <Form>
             <Field
               label="Descripción"
@@ -46,7 +47,14 @@ const AddExpenses = () => {
               value={values.amount}
             />
             <ErrorMessage name="amount" component="div" />
-            <DatePicker label="Fecha" />
+            <DatePicker
+              label="Fecha"
+              name="date"
+              format="DD/MM/YYYY"
+              defaultValue={values.date}
+              // disableOpenPicker
+              onChange={(value) => setFieldValue("date", value)}
+            />
             <Button variant="contained" type="submit" disabled={isSubmitting}>
               Crear
             </Button>
