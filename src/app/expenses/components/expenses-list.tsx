@@ -1,5 +1,6 @@
-import axios from '@/config/api';
-import React, { useState, useEffect } from 'react';
+import axios from "@/config/api";
+import dayjs from "dayjs";
+import React, { useState, useEffect } from "react";
 
 const ExpensesList = () => {
   const [expenses, setExpenses] = useState([]);
@@ -7,10 +8,10 @@ const ExpensesList = () => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const response = await axios.get('/expenses');
+        const response = await axios.get("/expenses");
         setExpenses(response.data);
       } catch (error) {
-        console.error('Error al obtener gastos:', error);
+        console.error("Error al obtener gastos:", error);
       }
     };
 
@@ -23,7 +24,8 @@ const ExpensesList = () => {
       <ul>
         {expenses.map((expense: any) => (
           <li key={expense.id}>
-            {expense.description} - ${expense.amount}
+            {dayjs(expense.date).format("DD/MM/YYYY")}: {expense.description} -
+            ${expense.amount}
           </li>
         ))}
       </ul>
