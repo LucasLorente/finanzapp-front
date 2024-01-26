@@ -8,8 +8,8 @@ const ExpensesList = () => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const response = await axios.get("/expenses");
-        setExpenses(response.data);
+        const { data: expenses } = await axios.get("/expenses");
+        setExpenses(expenses);
       } catch (error) {
         console.error("Error al obtener gastos:", error);
       }
