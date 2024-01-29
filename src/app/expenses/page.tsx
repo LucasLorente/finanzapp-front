@@ -2,12 +2,13 @@
 
 import React from "react";
 import ExpensesList from "./components/expenses-list";
+import { Container } from "@mui/material";
 
 const Expenses = () => {
   return (
-    <div>
+    <Container className="flex flex-col items-center justify-center">
       <ExpensesList />
-    </div>
+    </Container>
   );
 };
 

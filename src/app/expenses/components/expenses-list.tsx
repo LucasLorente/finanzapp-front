@@ -1,4 +1,5 @@
 import axios from "@/config/api";
+import { Typography } from "@mui/material";
 import dayjs from "dayjs";
 import React, { useState, useEffect } from "react";
 
@@ -20,7 +21,9 @@ const ExpensesList = () => {
 
   return (
     <div>
-      <h1>Lista de Gastos</h1>
+      <Typography variant="h1" gutterBottom>
+        Lista de Gastos
+      </Typography>
       <ul>
         {expenses.map((expense: any) => (
           <li key={expense.id}>
