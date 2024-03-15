@@ -1,19 +1,53 @@
-import { Button, Container, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Container,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
 import React from "react";
 
+const card = (
+  <React.Fragment>
+    <CardHeader
+      title={
+        <Typography color="white" variant="h4" align="center">
+          Gastos
+        </Typography>
+      }
+    ></CardHeader>
+    <CardContent>
+      <Typography color="white">Mensuales: $100.256</Typography>
+      <Typography color="white">Semanales: $100.256</Typography>
+      <Typography color="white">Promedio: $100.256</Typography>
+    </CardContent>
+    <CardActions className="flex items-center justify-center">
+      <Button size="large" variant="text">
+        <Typography color="white">Ver Más</Typography>
+      </Button>
+    </CardActions>
+  </React.Fragment>
+);
+
 const HomePage = () => {
   return (
-    <Container className="flex flex-col items-center justify-center">
+    <>
       <Typography variant="h1" gutterBottom>
-        Title
+        Finance
       </Typography>
-      <Link href="/expenses">
-        <Button variant="contained" size="large">
-          Expenses
-        </Button>
-      </Link>
-    </Container>
+      <Container className="flex justify-around">
+        <Card className="secondary-color" variant="outlined">
+          {card}
+        </Card>
+        <Card className="secondary-color" variant="outlined">
+          {card}
+        </Card>
+      </Container>
+      <Link href="/expenses"></Link>
+    </>
   );
 };
 
