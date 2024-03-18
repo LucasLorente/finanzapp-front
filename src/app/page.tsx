@@ -25,9 +25,11 @@ const card = (
       <Typography color="white">Promedio: $100.256</Typography>
     </CardContent>
     <CardActions className="flex items-center justify-center">
-      <Button size="large" variant="text">
-        <Typography color="white">Ver Más</Typography>
-      </Button>
+      <Link href="/expenses">
+        <Button size="large" variant="text">
+          <Typography color="white">Ver Más</Typography>
+        </Button>
+      </Link>
     </CardActions>
   </React.Fragment>
 );
@@ -39,10 +41,10 @@ const HomePage = () => {
         Finance
       </Typography>
       <Container className="flex justify-around">
-        <Card className="secondary-color" variant="outlined">
+        <Card className="secondary-color p-3" variant="outlined">
           {card}
         </Card>
-        <Card className="secondary-color" variant="outlined">
+        <Card className="secondary-color p-3" variant="outlined">
           {card}
         </Card>
       </Container>
