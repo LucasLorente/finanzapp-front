@@ -1,56 +1,41 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Container,
-  Typography,
-} from "@mui/material";
-import Link from "next/link";
+import { fetchMonthly, fetchTotal, fetchWeekly } from "@/api/api.expenses";
+import CardComponent from "@/shared/components/Card/Card.component";
+import { Container, Typography } from "@mui/material";
 import React from "react";
 
-const card = (
-  <React.Fragment>
-    <CardHeader
-      title={
-        <Typography color="white" variant="h4" align="center">
-          Gastos
-        </Typography>
-      }
-    ></CardHeader>
-    <CardContent>
-      <Typography color="white">Mensuales: $100.256</Typography>
-      <Typography color="white">Semanales: $100.256</Typography>
-      <Typography color="white">Promedio: $100.256</Typography>
-    </CardContent>
-    <CardActions className="flex items-center justify-center">
-      <Link href="/expenses">
-        <Button size="large" variant="text">
-          <Typography color="white">Ver Más</Typography>
-        </Button>
-      </Link>
-    </CardActions>
-  </React.Fragment>
-);
+export default async function HomePage() {
+  const expensesTotalData = fetchTotal();
+  const expensesWeeklyData = fetchWeekly();
+  const expensesMonthlyData = fetchMonthly();
 
-const HomePage = () => {
+  // Wait for the promises to resolve
+  const [total, weekly, monthly] = await Promise.all([
+    expensesTotalData,
+    expensesWeeklyData,
+    expensesMonthlyData,
+  ]);
+
   return (
     <>
       <Typography variant="h1" gutterBottom>
         Finance
       </Typography>
       <Container className="flex justify-around">
-        <Card className="secondary-color p-3" variant="outlined">
-          {card}
-        </Card>
-        <Card className="secondary-color p-3" variant="outlined">
-          {card}
-        </Card>
+        <CardComponent
+          title="Gastos"
+          redirect="/expenses"
+          total={total}
+          weekly={weekly}
+          monthly={monthly}
+        ></CardComponent>
+        <CardComponent
+          title="Ingresos"
+          redirect="/income"
+          total={total}
+          weekly={weekly}
+          monthly={monthly}
+        ></CardComponent>
       </Container>
-      <Link href="/expenses"></Link>
     </>
   );
-};
-
-export default HomePage;
+}
