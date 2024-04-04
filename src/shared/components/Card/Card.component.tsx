@@ -34,9 +34,9 @@ const CardComponent = ({
         }
       ></CardHeader>
       <CardContent>
-        <Typography color="white">Mensuales: ${monthly}</Typography>
-        <Typography color="white">Semanales: ${weekly}</Typography>
-        <Typography color="white">Promedio: ${total}</Typography>
+        <Typography color="white">Mensuales: ${monthly || 0}</Typography>
+        <Typography color="white">Semanales: ${weekly || 0}</Typography>
+        <Typography color="white">Promedio: ${total || 0}</Typography>
       </CardContent>
       <CardActions className="flex items-center justify-center">
         <Link href={redirect}>

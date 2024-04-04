@@ -1,28 +1,32 @@
-"use client";
-
 import React from "react";
 import ExpensesList from "./components/expenses-list";
-import { Container, Typography } from "@mui/material";
-import { fetchMonthly, fetchTotal, fetchWeekly } from "@/api/api.expenses";
+// import { Button, Container } from "@mui/material";
+import {
+  fetchExpenses,
+  fetchMonthly,
+  fetchTotal,
+  fetchWeekly,
+} from "@/api/api.expenses";
+import Link from "next/link";
+import AddExpensesModal from "./components/add-expenses-modal";
 
 export default async function Expenses() {
-  const expensesTotalData = fetchTotal();
-  const expensesWeeklyData = fetchWeekly();
-  const expensesMonthlyData = fetchMonthly();
-
-  // Wait for the promises to resolve
-  const [total, weekly, monthly] = await Promise.all([
-    expensesTotalData,
-    expensesWeeklyData,
-    expensesMonthlyData,
+  const [expenses, total, weekly, monthly] = await Promise.all([
+    fetchExpenses(),
+    fetchTotal(),
+    fetchWeekly(),
+    fetchMonthly(),
   ]);
 
   return (
-    <Container className="flex flex-col items-center justify-center">
-      <ExpensesList />
-      <Typography>Total: ${total}</Typography>
-      <Typography>Semanal: ${weekly}</Typography>
-      <Typography>Mensual: ${monthly}</Typography>
-    </Container>
+    <div className="flex flex-col items-center justify-center">
+      <ExpensesList
+        expenses={expenses}
+        total={total}
+        weekly={weekly}
+        monthly={monthly}
+      />
+      <AddExpensesModal />
+    </div>
   );
 }

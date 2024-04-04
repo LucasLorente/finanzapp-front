@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Header></Header>
-        <div className="flex flex-col min-h-screen mx-auto">
+        <div className="flex flex-col min-h-screen mx-auto m-10">
           <div className="flex-grow">
             <main className="flex flex-col items-center justify-center">
               <Providers>{children}</Providers>

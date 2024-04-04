@@ -1,6 +1,7 @@
 import axios from "@/config/api";
+import { Expense } from "@/types";
 
-const fetchExpenses = async () => {
+const fetchExpenses = async (): Promise<Expense[]> => {
   try {
     const { data: expenses } = await axios.get("/expenses");
     return expenses;

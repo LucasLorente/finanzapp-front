@@ -4,16 +4,9 @@ import { Container, Typography } from "@mui/material";
 import React from "react";
 
 export default async function HomePage() {
-  const expensesTotalData = fetchTotal();
-  const expensesWeeklyData = fetchWeekly();
-  const expensesMonthlyData = fetchMonthly();
-
-  // Wait for the promises to resolve
-  const [total, weekly, monthly] = await Promise.all([
-    expensesTotalData,
-    expensesWeeklyData,
-    expensesMonthlyData,
-  ]);
+  const total = await fetchTotal();
+  const weekly = await fetchWeekly();
+  const monthly = await fetchMonthly();
 
   return (
     <>

@@ -1,4 +1,5 @@
-import axios from "@/config/api";
+"use client";
+
 import { Expense } from "@/types";
 import {
   Paper,
@@ -6,54 +7,76 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
   TableRow,
   Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-const ExpensesList = () => {
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-
-  useEffect(() => {
-    const fetchExpenses = async () => {
-      try {
-        const { data: expenses } = await axios.get("/expenses");
-        setExpenses(expenses);
-      } catch (error) {
-        console.error("Error al obtener gastos:", error);
-      }
-    };
-
-    fetchExpenses();
-  }, []);
-
+const ExpensesList = ({
+  expenses,
+  total,
+  weekly,
+  monthly,
+}: {
+  expenses: Expense[];
+  total: number;
+  weekly: number;
+  monthly: number;
+}) => {
   return (
     <>
       <Typography variant="h1" gutterBottom>
         Lista de Gastos
       </Typography>
-      <TableContainer component={Paper}>
+      <TableContainer
+        component={Paper}
+        className="secondary-color text-red-500 p-3"
+      >
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Fecha</TableCell>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Monto</TableCell>
+              <TableCell className="text-white text-xl font-bold">
+                Fecha
+              </TableCell>
+              <TableCell className="text-white text-xl font-bold">
+                Nombre
+              </TableCell>
+              <TableCell className="text-white text-xl font-bold">
+                Monto
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {expenses.map((expense) => (
-              <TableRow key={expense.id}>
-                <TableCell component="th" scope="row">
+              <TableRow key={expense.id} hover>
+                <TableCell className="text-white text-lg">
                   {dayjs(expense.date).format("DD/MM/YYYY")}
                 </TableCell>
-                <TableCell>{expense.description}</TableCell>
-                <TableCell>${expense.amount}</TableCell>
+                <TableCell className="text-white text-lg">
+                  {expense.description}
+                </TableCell>
+                <TableCell className="text-white text-lg">
+                  ${expense.amount}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell className="text-white text-lg font-bold">
+                Semanal: ${weekly || 0}
+              </TableCell>
+              <TableCell className="text-white text-lg font-bold">
+                Mensual: ${monthly || 0}
+              </TableCell>
+              <TableCell className="text-white text-lg font-bold">
+                Total: ${total || 0}
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
     </>
