@@ -1,15 +1,12 @@
 "use client";
 
 import React from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
-import { Container } from "@mui/material";
-import AddExpensesForm from "./add-expenses-form";
+import AddIncomeForm from "./add-income-form";
 
-export default function AddExpensesModal() {
+export default function AddIncomeModal() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -21,7 +18,7 @@ export default function AddExpensesModal() {
         variant="outlined"
         onClick={handleOpen}
       >
-        Añadir Gasto
+        Añadir Ingreso
       </Button>
       <Modal
         open={open}
@@ -31,16 +28,8 @@ export default function AddExpensesModal() {
         className="flex flex-col items-center justify-center"
       >
         <>
-          <AddExpensesForm></AddExpensesForm>
+          <AddIncomeForm />
         </>
-        {/* <Container className="flex flex-col items-center justify-center secondary-color">
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Container> */}
       </Modal>
     </>
   );

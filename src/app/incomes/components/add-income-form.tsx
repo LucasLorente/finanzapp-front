@@ -3,7 +3,6 @@
 import axios from "@/config/api";
 import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import FormInput from "./components/form-input";
 import dayjs from "dayjs";
 import { Expense } from "@/types";
 import * as Yup from "yup";
@@ -17,16 +16,17 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import FormInput from "../add/components/form-input";
 
-const AddExpenses = () => {
-  const expenseInitialValue = {
+const AddIncomeForm = () => {
+  const incomeInitialValue = {
     description: "",
     amount: "",
     date: dayjs(),
     categoryId: "",
   };
 
-  const ExpenseCreationSchema = Yup.object().shape({
+  const IncomeCreationSchema = Yup.object().shape({
     description: Yup.string().max(50, "Descripción demasiado larga"),
     amount: Yup.number()
       .required("Este campo es requerido")
@@ -41,7 +41,7 @@ const AddExpenses = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const { data: categories } = await axios.get("/expenses-category");
+        const { data: categories } = await axios.get("/income-category");
         setCategories(categories);
       } catch (error) {
         console.error("Error al obtener categorías:", error);
@@ -51,9 +51,9 @@ const AddExpenses = () => {
     fetchCategories();
   }, []);
 
-  const createExpense = async (values: any, { resetForm }: any) => {
+  const createIncome = async (values: any, { resetForm }: any) => {
     try {
-      const response: Expense = await axios.post("/expenses", values);
+      await axios.post("/incomes", values);
       resetForm();
     } catch (error) {
       console.error("Error al obtener gastos:", error);
@@ -61,18 +61,18 @@ const AddExpenses = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col items-center">
-      <Typography variant="h1" className="m-10 text-white">
-        Ingresar nuevo gasto
+    <div className="flex flex-col items-center primary-color p-10 rounded-lg">
+      <Typography variant="h3" className="mb-10" color="white">
+        Agregar Ingreso
       </Typography>
       <Formik
-        initialValues={expenseInitialValue}
-        onSubmit={createExpense}
-        validationSchema={ExpenseCreationSchema}
+        initialValues={incomeInitialValue}
+        onSubmit={createIncome}
+        validationSchema={IncomeCreationSchema}
       >
         {({ isSubmitting, values, setFieldValue, isValid, handleChange }) => (
           <Form className="flex flex-col items-center justify-center">
-            <Card variant="outlined">
+            <Card className="secondary-color">
               <CardContent className="flex flex-col justify-between min-h-72">
                 <Field
                   label="Descripción"
@@ -117,7 +117,7 @@ const AddExpenses = () => {
               <CardActions className="flex justify-center">
                 <Button
                   size="large"
-                  variant="outlined"
+                  variant="contained"
                   color="success"
                   type="submit"
                   disabled={isSubmitting || !isValid}
@@ -133,4 +133,4 @@ const AddExpenses = () => {
   );
 };
 
-export default AddExpenses;
+export default AddIncomeForm;

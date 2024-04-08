@@ -3,7 +3,6 @@
 import axios from "@/config/api";
 import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import FormInput from "./components/form-input";
 import dayjs from "dayjs";
 import { Expense } from "@/types";
 import * as Yup from "yup";
@@ -17,8 +16,9 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
+import FormInput from "../add/components/form-input";
 
-const AddExpenses = () => {
+const AddExpensesForm = () => {
   const expenseInitialValue = {
     description: "",
     amount: "",
@@ -33,7 +33,10 @@ const AddExpenses = () => {
       .positive("Debe ser un monto positivo")
       .integer(),
     date: Yup.date(),
-    categoryId: Yup.number().required("Este campo es requerido").integer(),
+    categoryId: Yup.number()
+      .required("Este campo es requerido")
+      .positive("Debe ser un monto positivo")
+      .integer(),
   });
 
   const [categories, setCategories] = useState([]);
@@ -61,9 +64,9 @@ const AddExpenses = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col items-center">
-      <Typography variant="h1" className="m-10 text-white">
-        Ingresar nuevo gasto
+    <div className="flex flex-col items-center primary-color p-10 rounded-lg">
+      <Typography variant="h3" className="mb-10" color="white">
+        Agregar Gasto
       </Typography>
       <Formik
         initialValues={expenseInitialValue}
@@ -72,7 +75,7 @@ const AddExpenses = () => {
       >
         {({ isSubmitting, values, setFieldValue, isValid, handleChange }) => (
           <Form className="flex flex-col items-center justify-center">
-            <Card variant="outlined">
+            <Card className="secondary-color">
               <CardContent className="flex flex-col justify-between min-h-72">
                 <Field
                   label="Descripción"
@@ -117,7 +120,7 @@ const AddExpenses = () => {
               <CardActions className="flex justify-center">
                 <Button
                   size="large"
-                  variant="outlined"
+                  variant="contained"
                   color="success"
                   type="submit"
                   disabled={isSubmitting || !isValid}
@@ -133,4 +136,4 @@ const AddExpenses = () => {
   );
 };
 
-export default AddExpenses;
+export default AddExpensesForm;

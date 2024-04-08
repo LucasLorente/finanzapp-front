@@ -1,13 +1,11 @@
 import React from "react";
 import ExpensesList from "./components/expenses-list";
-// import { Button, Container } from "@mui/material";
 import {
   fetchExpenses,
   fetchMonthly,
   fetchTotal,
   fetchWeekly,
 } from "@/api/api.expenses";
-import Link from "next/link";
 import AddExpensesModal from "./components/add-expenses-modal";
 
 export default async function Expenses() {

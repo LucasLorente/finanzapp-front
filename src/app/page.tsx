@@ -23,7 +23,7 @@ export default async function HomePage() {
         ></CardComponent>
         <CardComponent
           title="Ingresos"
-          redirect="/income"
+          redirect="/incomes"
           total={total}
           weekly={weekly}
           monthly={monthly}
