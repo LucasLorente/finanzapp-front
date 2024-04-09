@@ -16,7 +16,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import FormInput from "../add/components/form-input";
+import FormInput from "@/shared/components/Form/form-input";
 
 const AddExpensesForm = () => {
   const expenseInitialValue = {
