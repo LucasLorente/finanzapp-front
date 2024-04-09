@@ -33,10 +33,7 @@ const AddExpensesForm = () => {
       .positive("Debe ser un monto positivo")
       .integer(),
     date: Yup.date(),
-    categoryId: Yup.number()
-      .required("Este campo es requerido")
-      .positive("Debe ser un monto positivo")
-      .integer(),
+    categoryId: Yup.number().required("Este campo es requerido").integer(),
   });
 
   const [categories, setCategories] = useState([]);

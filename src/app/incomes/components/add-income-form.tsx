@@ -4,7 +4,6 @@ import axios from "@/config/api";
 import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import dayjs from "dayjs";
-import { Expense } from "@/types";
 import * as Yup from "yup";
 import Button from "@mui/material/Button";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";

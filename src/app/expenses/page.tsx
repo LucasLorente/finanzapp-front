@@ -17,14 +17,22 @@ export default async function Expenses() {
   ]);
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <ExpensesList
+    <div className="flex flex-row items-center justify-around">
+      {/* <ExpensesList
         expenses={expenses}
         total={total}
         weekly={weekly}
         monthly={monthly}
-      />
-      <AddExpensesModal />
+      /> */}
+      <div className="flex flex-col items-center justify-center">
+        <ExpensesList
+          expenses={expenses}
+          total={total}
+          weekly={weekly}
+          monthly={monthly}
+        />
+        <AddExpensesModal />
+      </div>
     </div>
   );
 }
