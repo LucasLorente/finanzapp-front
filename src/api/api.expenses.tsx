@@ -11,7 +11,7 @@ const fetchExpenses = async (): Promise<Expense[]> => {
   }
 };
 
-const fetchTotal = async (): Promise<number> => {
+const fetchTotalExpenses = async (): Promise<number> => {
   try {
     const { data: total } = await axios.get("/expenses/total");
 
@@ -27,7 +27,7 @@ const fetchTotal = async (): Promise<number> => {
   }
 };
 
-const fetchWeekly = async (): Promise<number> => {
+const fetchWeeklyExpenses = async (): Promise<number> => {
   try {
     const { data: weekly } = await axios.get("/expenses/weekly");
 
@@ -43,7 +43,7 @@ const fetchWeekly = async (): Promise<number> => {
   }
 };
 
-const fetchMonthly = async (): Promise<number> => {
+const fetchMonthlyExpenses = async (): Promise<number> => {
   try {
     const { data: monthly } = await axios.get("/expenses/monthly");
 
@@ -59,4 +59,9 @@ const fetchMonthly = async (): Promise<number> => {
   }
 };
 
-export { fetchExpenses, fetchMonthly, fetchTotal, fetchWeekly };
+export {
+  fetchExpenses,
+  fetchMonthlyExpenses,
+  fetchTotalExpenses,
+  fetchWeeklyExpenses,
+};

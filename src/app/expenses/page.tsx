@@ -2,18 +2,18 @@ import React from "react";
 import ExpensesList from "./components/expenses-list";
 import {
   fetchExpenses,
-  fetchMonthly,
-  fetchTotal,
-  fetchWeekly,
+  fetchMonthlyExpenses,
+  fetchTotalExpenses,
+  fetchWeeklyExpenses,
 } from "@/api/api.expenses";
 import AddExpensesModal from "./components/add-expenses-modal";
 
 export default async function Expenses() {
   const [expenses, total, weekly, monthly] = await Promise.all([
     fetchExpenses(),
-    fetchTotal(),
-    fetchWeekly(),
-    fetchMonthly(),
+    fetchTotalExpenses(),
+    fetchWeeklyExpenses(),
+    fetchMonthlyExpenses(),
   ]);
 
   return (

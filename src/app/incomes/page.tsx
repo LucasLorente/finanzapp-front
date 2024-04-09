@@ -3,17 +3,17 @@ import IncomesList from "./components/incomes-list";
 import AddIncomeModal from "./components/add-income-modal";
 import {
   fetchIncomes,
-  fetchMonthly,
-  fetchTotal,
-  fetchWeekly,
+  fetchMonthlyIncomes,
+  fetchTotalIncomes,
+  fetchWeeklyIncomes,
 } from "@/api/api.incomes";
 
 export default async function Incomes() {
   const [incomes, total, weekly, monthly] = await Promise.all([
     fetchIncomes(),
-    fetchTotal(),
-    fetchWeekly(),
-    fetchMonthly(),
+    fetchTotalIncomes(),
+    fetchWeeklyIncomes(),
+    fetchMonthlyIncomes(),
   ]);
 
   return (
