@@ -1,12 +1,12 @@
 import React from "react";
 import IncomesList from "./components/incomes-list";
-import AddIncomeModal from "./components/add-income-modal";
 import {
   fetchIncomes,
   fetchMonthlyIncomes,
   fetchTotalIncomes,
   fetchWeeklyIncomes,
 } from "@/services/api.incomes";
+import TransactionModal from "@/shared/components/Modal/TransactionModal.component";
 
 export default async function Incomes() {
   const [incomes, total, weekly, monthly] = await Promise.all([
@@ -24,7 +24,11 @@ export default async function Incomes() {
         weekly={weekly}
         monthly={monthly}
       />
-      <AddIncomeModal />
+      <TransactionModal
+        type="income"
+        buttonText="Añadir Ingreso"
+        title="Agregar Ingreso"
+      />
     </div>
   );
 }

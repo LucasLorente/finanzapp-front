@@ -6,7 +6,7 @@ import {
   fetchTotalExpenses,
   fetchWeeklyExpenses,
 } from "@/services/api.expenses";
-import AddExpensesModal from "./components/add-expenses-modal";
+import TransactionModal from "@/shared/components/Modal/TransactionModal.component";
 
 export default async function Expenses() {
   const [expenses, total, weekly, monthly] = await Promise.all([
@@ -18,12 +18,6 @@ export default async function Expenses() {
 
   return (
     <div className="flex flex-row items-center justify-around">
-      {/* <ExpensesList
-        expenses={expenses}
-        total={total}
-        weekly={weekly}
-        monthly={monthly}
-      /> */}
       <div className="flex flex-col items-center justify-center">
         <ExpensesList
           expenses={expenses}
@@ -31,7 +25,11 @@ export default async function Expenses() {
           weekly={weekly}
           monthly={monthly}
         />
-        <AddExpensesModal />
+        <TransactionModal
+          type="expense"
+          buttonText="Añadir Gasto"
+          title="Agregar Gasto"
+        />
       </div>
     </div>
   );

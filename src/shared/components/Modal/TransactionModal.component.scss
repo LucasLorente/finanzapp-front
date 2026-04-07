@@ -1,0 +1,78 @@
+/* TransactionModal.component.scss */
+.transaction-modal-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 480px;
+  background: linear-gradient(145deg, #1f487e, #183a66) !important;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2.5rem;
+  outline: none;
+}
+
+.transaction-modal-title {
+  color: #ffffff;
+  font-weight: 800 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem !important;
+  text-align: center;
+}
+
+.transaction-form-element {
+  margin-bottom: 1.2rem !important;
+  width: 100%;
+  
+  label {
+    color: #cbd5e1 !important;
+  }
+  
+  /* Material UI Input overrides to match dark premium theme */
+  .MuiInputBase-root {
+    background-color: rgba(20, 47, 82, 0.6) !important;
+    color: #ffffff !important;
+    border-radius: 8px;
+    width: 100%;
+    
+    fieldset {
+      border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    &:hover fieldset {
+      border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+    
+    &.Mui-focused fieldset {
+      border-color: #60a5fa !important; /* light blue focus */
+    }
+  }
+
+  .MuiSelect-icon {
+    color: #ffffff !important;
+  }
+}
+
+.transaction-modal-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+
+  .btn-submit {
+    border-radius: 12px;
+    padding: 0.6rem 2.5rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+}
+
+.form-error-message {
+  color: #fca5a5;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+  margin-left: 0.5rem;
+  font-weight: 500;
+}

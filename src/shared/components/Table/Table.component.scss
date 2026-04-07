@@ -1,0 +1,100 @@
+.transaction-title {
+  color: #ffffff;
+  font-weight: 800 !important;
+  font-size: 2.5rem !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1.5rem !important;
+  letter-spacing: -0.02em;
+}
+
+.transaction-container {
+  background: linear-gradient(145deg, #1f487e, #183a66) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  padding: 0 !important;
+}
+
+.transaction-table {
+  /* Header styling */
+  th {
+    background-color: #142f52;
+    color: #e2e8f0 !important;
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 1.2rem 1.5rem !important;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  /* Body styling */
+  td {
+    color: #f8fafc !important;
+    font-size: 1.05rem !important;
+    padding: 1rem 1.5rem !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* Hover effect for rows */
+  tbody tr {
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.06) !important;
+      transform: translateY(-1px);
+      
+      td {
+        color: #ffffff !important;
+      }
+    }
+  }
+
+  /* Amount styling */
+  .income-amount {
+    color: #4ade80 !important; /* Positive green for incomes */
+    font-weight: 600 !important;
+  }
+
+  .expense-amount {
+    color: #f87171 !important; /* Red for expenses */
+    font-weight: 600 !important;
+  }
+
+  /* Footer styling */
+  tfoot {
+    td {
+      background-color: rgba(20, 47, 82, 0.9) !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      font-size: 1.15rem !important;
+      border-top: 2px solid rgba(255, 255, 255, 0.1) !important;
+      border-bottom: none !important;
+      padding: 1.2rem 1.5rem !important;
+
+      span {
+        margin-left: 0.4rem;
+      }
+    }
+  }
+}
+
+.transaction-pagination {
+  color: #ffffff !important;
+  border-top: 2px solid rgba(255, 255, 255, 0.1) !important;
+  background-color: #142f52 !important;
+
+  .MuiSelect-icon {
+    color: #ffffff !important;
+  }
+  
+  .MuiTablePagination-actions button {
+    color: #ffffff !important;
+  }
+
+  .Mui-disabled {
+    color: rgba(255, 255, 255, 0.3) !important;
+  }
+}

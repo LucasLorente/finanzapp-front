@@ -30,7 +30,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <h1 className="text-5xl mb-5">
+      <h1 className="text-6xl font-extrabold mb-10">
         Finance
       </h1>
       <div className="flex flex-row justify-center mx-auto w-full gap-10">
