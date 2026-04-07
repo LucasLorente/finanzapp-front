@@ -6,7 +6,7 @@ import {
   fetchMonthlyIncomes,
   fetchTotalIncomes,
   fetchWeeklyIncomes,
-} from "@/api/api.incomes";
+} from "@/services/api.incomes";
 
 export default async function Incomes() {
   const [incomes, total, weekly, monthly] = await Promise.all([

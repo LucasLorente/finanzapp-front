@@ -5,7 +5,7 @@ import {
   fetchMonthlyExpenses,
   fetchTotalExpenses,
   fetchWeeklyExpenses,
-} from "@/api/api.expenses";
+} from "@/services/api.expenses";
 import AddExpensesModal from "./components/add-expenses-modal";
 
 export default async function Expenses() {

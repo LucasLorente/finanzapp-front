@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { Providers } from "./providers";
-import "./globals.css";
+import "./globals.scss";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header></Header>
+        <Header />
         <div className="flex flex-col min-h-screen mx-auto m-10">
           <div className="flex-grow">
             <main className="flex flex-col items-center justify-center">

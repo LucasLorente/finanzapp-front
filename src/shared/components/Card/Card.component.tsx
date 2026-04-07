@@ -5,11 +5,13 @@ import {
   Card,
   CardActions,
   CardContent,
-  CardHeader,
   Typography,
+  Box,
+  Divider,
 } from "@mui/material";
 import Link from "next/link";
 import React from "react";
+import "./Card.styles.scss";
 
 const CardComponent = ({
   title,
@@ -24,24 +26,67 @@ const CardComponent = ({
   weekly: number;
   monthly: number;
 }) => {
+  const isIncome = title.toLowerCase() === "ingresos";
+  const typeClass = isIncome ? "income" : "expense";
+
   return (
-    <Card className="secondary-color p-3" variant="outlined">
-      <CardHeader
-        title={
-          <Typography color="white" variant="h4" align="center">
+    <Card className={`card-wrapper ${typeClass}`}>
+      <CardContent className="card-content">
+        <Box className="header-container">
+          <Typography
+            variant="h5"
+            color="text.primary"
+            className="card-title"
+          >
             {title}
           </Typography>
-        }
-      ></CardHeader>
-      <CardContent>
-        <Typography color="white">Mensuales: ${monthly || 0}</Typography>
-        <Typography color="white">Semanales: ${weekly || 0}</Typography>
-        <Typography color="white">Promedio: ${total || 0}</Typography>
+          <Box className={`summary-badge ${typeClass}`}>
+            Resumen
+          </Box>
+        </Box>
+
+        <Box className="total-container">
+          <Typography variant="body2" color="text.secondary" className="total-label">
+            Promedio General
+          </Typography>
+          <Typography
+            variant="h3"
+            className={`main-total ${typeClass}`}
+          >
+            ${total?.toLocaleString("es-AR") || 0}
+          </Typography>
+        </Box>
+
+        <Box className="stats-grid">
+          <Box className="stat-box">
+            <Typography variant="caption" display="block" color="text.secondary" className="stat-label">
+              Mensual
+            </Typography>
+            <Typography variant="subtitle1" color="text.primary" className="stat-value">
+              ${monthly?.toLocaleString("es-AR") || 0}
+            </Typography>
+          </Box>
+          <Divider orientation="vertical" flexItem className="divider" />
+          <Box className="stat-box">
+            <Typography variant="caption" display="block" color="text.secondary" className="stat-label">
+              Semanal
+            </Typography>
+            <Typography variant="subtitle1" color="text.primary" className="stat-value">
+              ${weekly?.toLocaleString("es-AR") || 0}
+            </Typography>
+          </Box>
+        </Box>
       </CardContent>
-      <CardActions className="flex items-center justify-center">
-        <Link href={redirect}>
-          <Button size="large" variant="text">
-            <Typography color="white">Ver Más</Typography>
+
+      <CardActions className="card-actions">
+        <Link href={redirect} passHref className="action-link">
+          <Button
+            fullWidth
+            variant="contained"
+            disableElevation
+            className={`action-btn ${typeClass}`}
+          >
+            Ver Detalles
           </Button>
         </Link>
       </CardActions>

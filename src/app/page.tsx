@@ -2,14 +2,13 @@ import {
   fetchMonthlyExpenses,
   fetchTotalExpenses,
   fetchWeeklyExpenses,
-} from "@/api/api.expenses";
+} from "@/services/api.expenses";
 import {
   fetchMonthlyIncomes,
   fetchTotalIncomes,
   fetchWeeklyIncomes,
-} from "@/api/api.incomes";
+} from "@/services/api.incomes";
 import CardComponent from "@/shared/components/Card/Card.component";
-import { Container, Typography } from "@mui/material";
 import React from "react";
 
 export default async function HomePage() {
@@ -31,10 +30,10 @@ export default async function HomePage() {
 
   return (
     <>
-      <Typography variant="h1" gutterBottom>
+      <h1 className="text-5xl mb-5">
         Finance
-      </Typography>
-      <Container className="flex justify-around">
+      </h1>
+      <div className="flex flex-row justify-center mx-auto w-full gap-10">
         <CardComponent
           title="Gastos"
           redirect="/expenses"
@@ -49,7 +48,7 @@ export default async function HomePage() {
           weekly={weeklyIncomes}
           monthly={monthlyIncomes}
         ></CardComponent>
-      </Container>
+      </div>
     </>
   );
 }
