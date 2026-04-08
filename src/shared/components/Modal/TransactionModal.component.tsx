@@ -28,9 +28,11 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
   const handleClose = () => setOpen(false);
 
   const [categories, setCategories] = useState([]);
+  const [expenseTypes, setExpenseTypes] = useState([]);
 
   const isIncome = type === "income";
-  const categoryEndpoint = isIncome ? "/income-category" : "/expenses-category";
+  const categoryEndpoint = "/expenses-category";
+  const expenseTypeEndpoint = "/expenses-type";
   const submitEndpoint = isIncome ? "/incomes" : "/expenses";
 
   const initialValues = {
@@ -38,6 +40,7 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
     amount: "",
     date: dayjs(),
     categoryId: "",
+    expenseType: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -49,12 +52,13 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
       .positive("Debe ser un monto positivo")
       .integer(),
     date: Yup.date(),
-    categoryId: Yup.number().required("La categoría es requerida").integer(),
+    categoryId: isIncome
+      ? Yup.mixed().notRequired()
+      : Yup.number().required("La categoría es requerida").integer(),
   });
 
   useEffect(() => {
-    // Solo fetchear las categorías cuando abrimos el modal
-    if (!open) return;
+    if (!open || isIncome) return;
 
     const fetchCategories = async () => {
       try {
@@ -65,12 +69,27 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
       }
     };
 
+    const fetchExpenseTypes = async () => {
+      try {
+        const { data } = await axios.get(expenseTypeEndpoint);
+        setExpenseTypes(data);
+      } catch (error) {
+        console.error("Error al obtener tipos de gasto:", error);
+      }
+    };
+
     fetchCategories();
-  }, [open, categoryEndpoint]);
+    fetchExpenseTypes();
+  }, [open, categoryEndpoint, isIncome]);
 
   const handleSubmit = async (values: any, { resetForm, setSubmitting }: any) => {
     try {
-      await axios.post(submitEndpoint, values);
+      const dataToSubmit = { ...values };
+      if (isIncome) {
+        delete dataToSubmit.categoryId;
+      }
+
+      await axios.post(submitEndpoint, dataToSubmit);
       resetForm();
       handleClose();
       // Refrescamos para visualizar el elemento nuevo en la tabla (alternativa a Server Actions en Next js)
@@ -85,11 +104,10 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
   return (
     <>
       <Button
-        className={`m-3 text-white font-bold px-6 py-2 rounded-xl transition-all ${
-           isIncome 
-            ? "border border-green-500 hover:bg-green-500/20 hover:border-green-400 text-green-100 bg-green-500/10" 
-            : "border border-red-500 hover:bg-red-500/20 hover:border-red-400 text-red-100 bg-red-500/10"
-        }`}
+        className={`m-3 text-white font-bold px-6 py-2 rounded-xl transition-all ${isIncome
+          ? "border border-green-500 hover:bg-green-500/20 hover:border-green-400 text-green-100 bg-green-500/10"
+          : "border border-red-500 hover:bg-red-500/20 hover:border-red-400 text-red-100 bg-red-500/10"
+          }`}
         variant="outlined"
         onClick={handleOpen}
       >
@@ -150,33 +168,59 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
                   />
                 </div>
 
-                <div className="transaction-form-element">
-                  <FormControl fullWidth>
-                    <InputLabel id="category-select-label">Categoría</InputLabel>
-                    <Select
-                      labelId="category-select-label"
-                      label="Categoría"
-                      name="categoryId"
-                      value={values.categoryId}
-                      onChange={handleChange}
-                    >
-                      {categories.map((category: any) => (
-                        <MenuItem value={category.id} key={category.id}>
-                          {category.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <div className="form-error-message">
-                    <ErrorMessage name="categoryId" />
+                {!isIncome && (
+                  <div className="transaction-form-element">
+                    <FormControl fullWidth>
+                      <InputLabel id="category-select-label">Categoría</InputLabel>
+                      <Select
+                        labelId="category-select-label"
+                        label="Categoría"
+                        name="categoryId"
+                        value={values.categoryId}
+                        onChange={handleChange}
+                      >
+                        {categories.map((category: any) => (
+                          <MenuItem value={category.id} key={category.id}>
+                            {category.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <div className="form-error-message">
+                      <ErrorMessage name="categoryId" />
+                    </div>
                   </div>
-                </div>
+                )}
+
+                {!isIncome && (
+                  <div className="transaction-form-element">
+                    <FormControl fullWidth>
+                      <InputLabel id="expense-type-select-label">Tipo de gasto</InputLabel>
+                      <Select
+                        labelId="expense-type-select-label"
+                        label="Tipo de gasto"
+                        name="expenseType"
+                        value={values.expenseType}
+                        onChange={handleChange}
+                      >
+                        {expenseTypes.map((expenseType: any) => (
+                          <MenuItem value={expenseType.id} key={expenseType.id}>
+                            {expenseType.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <div className="form-error-message">
+                      <ErrorMessage name="categoryId" />
+                    </div>
+                  </div>
+                )}
 
                 <div className="transaction-modal-actions">
-                  <Button 
-                    onClick={handleClose} 
-                    variant="text" 
-                    color="inherit" 
+                  <Button
+                    onClick={handleClose}
+                    variant="text"
+                    color="inherit"
                     className="text-white opacity-70 hover:opacity-100 hover:bg-white/10"
                   >
                     Cancelar
