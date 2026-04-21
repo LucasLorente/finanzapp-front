@@ -1,7 +1,9 @@
 "use client";
 
-import { Expense } from "@/types";
+import { Expense, ExpenseCategory, ExpenseType } from "@/types";
 import {
+  Box,
+  Chip,
   Paper,
   Table,
   TableBody,
@@ -24,6 +26,8 @@ interface TransactionTableProps {
   weekly: number;
   monthly: number;
   total: number;
+  categories: ExpenseCategory[];
+  types: ExpenseType[];
 }
 
 const TransactionTable: React.FC<TransactionTableProps> = ({
@@ -33,6 +37,8 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   weekly,
   monthly,
   total,
+  categories,
+  types,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -44,6 +50,15 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const getCategoryName = (id: number) => {
+    return categories.find((category) => category.id === id)?.name;
+  };
+
+  const getTypeName = (id: number) => {
+    console.log('hola')
+    return types.find((type) => type.id === id)?.name;
   };
 
   const isIncome = type === "income";
@@ -64,6 +79,8 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
             <TableRow>
               <TableCell>Fecha</TableCell>
               <TableCell>Nombre</TableCell>
+              {!isIncome && <TableCell>Tipo</TableCell>}
+              {!isIncome && <TableCell>Categoría</TableCell>}
               <TableCell align="right">Monto</TableCell>
             </TableRow>
           </TableHead>
@@ -75,7 +92,35 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                   <TableCell>
                     {dayjs(item.date).format("DD/MM/YYYY")}
                   </TableCell>
-                  <TableCell>{item.description}</TableCell>
+                  <TableCell>
+                    <Box>
+                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                        {item.description}
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                  {!isIncome && (
+                    <TableCell>
+                      {item.type_id && (
+                        <Chip
+                          label={getTypeName(item.type_id)}
+                          size="small"
+                          className="type-chip"
+                        />
+                      )}
+                    </TableCell>
+                  )}
+                  {!isIncome && (
+                    <TableCell>
+                      {item.category_id && (
+                        <Chip
+                          label={getCategoryName(item.category_id)}
+                          size="small"
+                          className="category-chip"
+                        />
+                      )}
+                    </TableCell>
+                  )}
                   <TableCell align="right" className={amountClass}>
                     ${item.amount}
                   </TableCell>
@@ -83,7 +128,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
               ))}
             {data.length === 0 && (
               <TableRow>
-                <TableCell colSpan={3} align="center" className="py-8 !text-gray-300">
+                <TableCell colSpan={isIncome ? 3 : 5} align="center" className="py-8 !text-gray-300">
                   No hay datos disponibles
                 </TableCell>
               </TableRow>
@@ -91,13 +136,13 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell>
+              <TableCell colSpan={1}>
                 Semanal: <span className={amountClass}>${weekly || 0}</span>
               </TableCell>
-              <TableCell>
+              <TableCell colSpan={isIncome ? 1 : 3}>
                 Mensual: <span className={amountClass}>${monthly || 0}</span>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="right" colSpan={1}>
                 Total: <span className={amountClass}>${total || 0}</span>
               </TableCell>
             </TableRow>

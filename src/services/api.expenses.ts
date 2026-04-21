@@ -1,5 +1,5 @@
 import axios from "@/config/api";
-import { Expense } from "@/types";
+import { Expense, ExpenseCategory, ExpenseType } from "@/types";
 
 const fetchExpenses = async (): Promise<Expense[]> => {
   try {
@@ -59,8 +59,30 @@ const fetchMonthlyExpenses = async (): Promise<number> => {
   }
 };
 
+const fetchExpensesCategories = async (): Promise<ExpenseCategory[]> => {
+  try {
+    const { data: expensesCategories } = await axios.get("/expenses-category");
+    return expensesCategories;
+  } catch (error) {
+    console.error("Error al obtener las categorías de gastos:", error);
+    throw new Error("Error al obtener las categorías de gastos");
+  }
+};
+
+const fetchExpensesTypes = async (): Promise<ExpenseType[]> => {
+  try {
+    const { data: expensesTypes } = await axios.get("/expenses-type");
+    return expensesTypes;
+  } catch (error) {
+    console.error("Error al obtener los tipos de gastos:", error);
+    throw new Error("Error al obtener los tipos de gastos");
+  }
+};
+
 export {
   fetchExpenses,
+  fetchExpensesCategories,
+  fetchExpensesTypes,
   fetchMonthlyExpenses,
   fetchTotalExpenses,
   fetchWeeklyExpenses,

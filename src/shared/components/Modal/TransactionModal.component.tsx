@@ -170,17 +170,17 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
                 {!isIncome && (
                   <div className="transaction-form-element">
                     <FormControl fullWidth>
-                      <InputLabel id="category-select-label">Categoría</InputLabel>
+                      <InputLabel id="expense-type-select-label">Tipo de gasto</InputLabel>
                       <Select
-                        labelId="category-select-label"
-                        label="Categoría"
-                        name="categoryId"
-                        value={values.categoryId}
+                        labelId="expense-type-select-label"
+                        label="Tipo de gasto"
+                        name="expenseType"
+                        value={values.expenseType}
                         onChange={handleChange}
                       >
-                        {categories.map((category: any) => (
-                          <MenuItem value={category.id} key={category.id}>
-                            {category.name}
+                        {expenseTypes.map((expenseType: any) => (
+                          <MenuItem value={expenseType.id} key={expenseType.id}>
+                            {expenseType.name}
                           </MenuItem>
                         ))}
                       </Select>
@@ -194,17 +194,17 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
                 {!isIncome && (
                   <div className="transaction-form-element">
                     <FormControl fullWidth>
-                      <InputLabel id="expense-type-select-label">Tipo de gasto</InputLabel>
+                      <InputLabel id="category-select-label">Categoría</InputLabel>
                       <Select
-                        labelId="expense-type-select-label"
-                        label="Tipo de gasto"
-                        name="expenseType"
-                        value={values.expenseType}
+                        labelId="category-select-label"
+                        label="Categoría"
+                        name="categoryId"
+                        value={values.categoryId}
                         onChange={handleChange}
                       >
-                        {expenseTypes.map((expenseType: any) => (
-                          <MenuItem value={expenseType.id} key={expenseType.id}>
-                            {expenseType.name}
+                        {categories.map((category: any) => (
+                          <MenuItem value={category.id} key={category.id}>
+                            {category.name}
                           </MenuItem>
                         ))}
                       </Select>
