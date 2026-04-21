@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { Providers } from "./providers";
-import "./globals.scss";
+import "./globals.css";
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";

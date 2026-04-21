@@ -51,7 +51,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
 
   return (
     <div className="w-full max-w-5xl mx-auto my-6 animate-fade-in-up">
-      <Typography variant="h1" gutterBottom className="transaction-title text-center sm:text-left">
+      <Typography variant="h3" gutterBottom className="text-center">
         {title}
       </Typography>
       <TableContainer
