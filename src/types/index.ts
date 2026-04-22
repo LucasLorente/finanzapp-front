@@ -18,3 +18,8 @@ export interface Expense {
   created_at?: Date;
   updated_at?: Date;
 }
+
+export interface GroupedData {
+  name: string;
+  total: number;
+}

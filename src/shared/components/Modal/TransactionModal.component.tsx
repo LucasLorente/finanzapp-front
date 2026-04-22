@@ -40,7 +40,7 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
     amount: "",
     date: dayjs(),
     categoryId: "",
-    expenseType: "",
+    typeId: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -55,6 +55,9 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
     categoryId: isIncome
       ? Yup.mixed().notRequired()
       : Yup.number().required("La categoría es requerida").integer(),
+    typeId: isIncome
+      ? Yup.mixed().notRequired()
+      : Yup.number().required("El tipo de gasto es requerido").integer(),
   });
 
   useEffect(() => {
@@ -87,8 +90,10 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
       const dataToSubmit = { ...values };
       if (isIncome) {
         delete dataToSubmit.categoryId;
+        delete dataToSubmit.typeId;
       }
 
+      console.log(dataToSubmit)
       await axios.post(submitEndpoint, dataToSubmit);
       resetForm();
       handleClose();
@@ -174,8 +179,8 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
                       <Select
                         labelId="expense-type-select-label"
                         label="Tipo de gasto"
-                        name="expenseType"
-                        value={values.expenseType}
+                        name="typeId"
+                        value={values.typeId}
                         onChange={handleChange}
                       >
                         {expenseTypes.map((expenseType: any) => (

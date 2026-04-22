@@ -1,5 +1,5 @@
 import axios from "@/config/api";
-import { Expense, ExpenseCategory, ExpenseType } from "@/types";
+import { Expense, ExpenseCategory, ExpenseType, GroupedData } from "@/types";
 
 const fetchExpenses = async (): Promise<Expense[]> => {
   try {
@@ -79,6 +79,26 @@ const fetchExpensesTypes = async (): Promise<ExpenseType[]> => {
   }
 };
 
+const fetchExpensesByCategory = async (): Promise<GroupedData[]> => {
+  try {
+    const { data } = await axios.get("/expenses/by-category");
+    return data;
+  } catch (error) {
+    console.error("Error al obtener gastos por categoría:", error);
+    throw new Error("Error al obtener gastos por categoría");
+  }
+};
+
+const fetchExpensesByType = async (): Promise<GroupedData[]> => {
+  try {
+    const { data } = await axios.get("/expenses/by-type");
+    return data;
+  } catch (error) {
+    console.error("Error al obtener gastos por tipo:", error);
+    throw new Error("Error al obtener gastos por tipo");
+  }
+};
+
 export {
   fetchExpenses,
   fetchExpensesCategories,
@@ -86,4 +106,6 @@ export {
   fetchMonthlyExpenses,
   fetchTotalExpenses,
   fetchWeeklyExpenses,
+  fetchExpensesByCategory,
+  fetchExpensesByType,
 };
