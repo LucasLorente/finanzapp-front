@@ -2,7 +2,6 @@
 
 import { Expense, ExpenseCategory, ExpenseType } from "@/types";
 import {
-  Box,
   Chip,
   Paper,
   Table,
@@ -13,7 +12,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 import React, { useState } from "react";
@@ -30,6 +28,8 @@ interface TransactionTableProps {
   types?: ExpenseType[];
 }
 
+const fmt = (n: number) => `$${Intl.NumberFormat("es-AR").format(n)}`;
+
 const TransactionTable: React.FC<TransactionTableProps> = ({
   title,
   data,
@@ -41,114 +41,113 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   types,
 }) => {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
+  const handleChangePage = (_: unknown, newPage: number) => setPage(newPage);
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+  const handleChangeRowsPerPage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
     setPage(0);
   };
 
-  const getCategoryName = (id: number) => {
-    return categories?.find((category) => category.id === id)?.name;
-  };
+  const getCategoryName = (id: number) =>
+    categories?.find((c) => c.id === id)?.name;
 
-  const getTypeName = (id: number) => {
-    return types?.find((type) => type.id === id)?.name;
-  };
+  const getTypeName = (id: number) =>
+    types?.find((t) => t.id === id)?.name;
 
   const isIncome = type === "income";
   const amountClass = isIncome ? "income-amount" : "expense-amount";
+  const colCount = isIncome ? 3 : 5;
 
   return (
-    <div className="w-full max-w-5xl mx-auto my-6 animate-fade-in-up">
-      <Typography variant="h3" gutterBottom className="text-center">
-        {title}
-      </Typography>
-      <TableContainer
-        component={Paper}
-        className="transaction-container"
-        elevation={0}
-      >
+    <div className="w-full animate-fade-in-up">
+      <TableContainer component={Paper} className="transaction-container" elevation={0}>
+        <div className="table-header">
+          <div>
+            <h2 className="table-title">{title}</h2>
+            <p className="table-subtitle">{data.length} registros</p>
+          </div>
+        </div>
+
         <Table className="transaction-table w-full">
           <TableHead>
             <TableRow>
               <TableCell>Fecha</TableCell>
-              <TableCell>Nombre</TableCell>
+              <TableCell>Descripción</TableCell>
               {!isIncome && <TableCell>Tipo</TableCell>}
               {!isIncome && <TableCell>Categoría</TableCell>}
               <TableCell align="right">Monto</TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
             {data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((item) => (
                 <TableRow key={item.id}>
-                  <TableCell>
+                  <TableCell className="date-cell">
                     {dayjs(item.date).format("DD/MM/YYYY")}
                   </TableCell>
-                  <TableCell>
-                    <Box>
-                      <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                        {item.description}
-                      </Typography>
-                    </Box>
+                  <TableCell className="description-cell">
+                    {item.description || <span className="text-slate-500 italic">Sin descripción</span>}
                   </TableCell>
                   {!isIncome && (
                     <TableCell>
                       {item.type_id && (
-                        <Chip
-                          label={getTypeName(item.type_id)}
-                          size="small"
-                          className="type-chip"
-                        />
+                        <Chip label={getTypeName(item.type_id)} size="small" className="type-chip" />
                       )}
                     </TableCell>
                   )}
                   {!isIncome && (
                     <TableCell>
                       {item.category_id && (
-                        <Chip
-                          label={getCategoryName(item.category_id)}
-                          size="small"
-                          className="category-chip"
-                        />
+                        <Chip label={getCategoryName(item.category_id)} size="small" className="category-chip" />
                       )}
                     </TableCell>
                   )}
                   <TableCell align="right" className={amountClass}>
-                    ${item.amount}
+                    {fmt(item.amount)}
                   </TableCell>
                 </TableRow>
               ))}
+
             {data.length === 0 && (
               <TableRow>
-                <TableCell colSpan={isIncome ? 3 : 5} align="center" className="py-8 !text-gray-300">
-                  No hay datos disponibles
+                <TableCell colSpan={colCount} align="center">
+                  <div className="empty-state">
+                    <p className="empty-title">No hay registros aún</p>
+                    <p className="empty-subtitle">Añade tu primer registro usando el botón de abajo</p>
+                  </div>
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
+
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={1}>
-                Semanal: <span className={amountClass}>${weekly || 0}</span>
-              </TableCell>
-              <TableCell colSpan={isIncome ? 1 : 3}>
-                Mensual: <span className={amountClass}>${monthly || 0}</span>
-              </TableCell>
-              <TableCell align="right" colSpan={1}>
-                Total: <span className={amountClass}>${total || 0}</span>
+              <TableCell colSpan={colCount}>
+                <div className="summary-bar">
+                  <div className="summary-item">
+                    <span className="summary-label">Semanal</span>
+                    <span className={`summary-value ${amountClass}`}>{fmt(weekly || 0)}</span>
+                  </div>
+                  <div className="summary-item">
+                    <span className="summary-label">Mensual</span>
+                    <span className={`summary-value ${amountClass}`}>{fmt(monthly || 0)}</span>
+                  </div>
+                  <div className="summary-item summary-total">
+                    <span className="summary-label">Total acumulado</span>
+                    <span className={`summary-value ${amountClass}`}>{fmt(total || 0)}</span>
+                  </div>
+                </div>
               </TableCell>
             </TableRow>
           </TableFooter>
         </Table>
+
         <TablePagination
-          rowsPerPageOptions={[5, 10, 15, 20]}
+          rowsPerPageOptions={[5, 10, 20]}
           component="div"
           className="transaction-pagination"
           count={data.length}
@@ -156,8 +155,10 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          labelRowsPerPage="Filas por página:"
-          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count !== -1 ? count : `más de ${to}`}`}
+          labelRowsPerPage="Filas:"
+          labelDisplayedRows={({ from, to, count }) =>
+            `${from}–${to} de ${count !== -1 ? count : `más de ${to}`}`
+          }
         />
       </TableContainer>
     </div>

@@ -21,16 +21,16 @@ export default async function Expenses() {
   ]);
 
   return (
-    <div className="flex flex-row items-center justify-around">
-      <div className="flex flex-col items-center justify-center">
-        <ExpensesList
-          categories={categories}
-          types={types}
-          expenses={expenses}
-          total={total}
-          weekly={weekly}
-          monthly={monthly}
-        />
+    <div className="max-w-5xl mx-auto px-6 py-8 w-full">
+      <ExpensesList
+        categories={categories}
+        types={types}
+        expenses={expenses}
+        total={total}
+        weekly={weekly}
+        monthly={monthly}
+      />
+      <div className="mt-4 flex justify-end">
         <TransactionModal
           type="expense"
           buttonText="Añadir Gasto"

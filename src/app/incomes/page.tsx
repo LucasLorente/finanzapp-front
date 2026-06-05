@@ -17,18 +17,20 @@ export default async function Incomes() {
   ]);
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="max-w-5xl mx-auto px-6 py-8 w-full">
       <IncomesList
         incomes={incomes}
         total={total}
         weekly={weekly}
         monthly={monthly}
       />
-      <TransactionModal
-        type="income"
-        buttonText="Añadir Ingreso"
-        title="Agregar Ingreso"
-      />
+      <div className="mt-4 flex justify-end">
+        <TransactionModal
+          type="income"
+          buttonText="Añadir Ingreso"
+          title="Agregar Ingreso"
+        />
+      </div>
     </div>
   );
 }

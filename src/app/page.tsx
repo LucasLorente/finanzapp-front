@@ -43,7 +43,7 @@ export default async function HomePage() {
         Dashboard
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 items-stretch">
         <CardComponent
           title="Gastos"
           redirect="/expenses"
@@ -60,7 +60,7 @@ export default async function HomePage() {
         ></CardComponent>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1">
           <ExpensesByTypeChart data={expensesByType} />
         </div>

@@ -1,6 +1,5 @@
 "use client"
 
-import React from "react"
 import {
     Cell,
     Pie,
@@ -10,10 +9,10 @@ import {
 } from "recharts"
 import { cx } from "@/lib/utils"
 
-const CHART_COLORS = ["#3b82f6", "#10b981", "#8b5cf6", "#f59e0b", "#ec4899", "#06b6d4"]
+const CHART_COLORS = ["#38bdf8", "#4ade80", "#fb7185", "#fbbf24", "#a78bfa", "#f97316"]
 
 interface DonutChartProps {
-    data: any[]
+    data: { name: string; total: number; [key: string]: unknown }[]
     category: string
     index: string
     variant?: "donut" | "pie"
@@ -36,14 +35,14 @@ const DonutChart = ({
                     <Tooltip
                         content={({ active, payload }) => {
                             if (active && payload && payload.length) {
-                                const data = payload[0].payload
+                                const item = payload[0].payload
                                 return (
-                                    <div className="rounded-md border border-gray-200 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-gray-950">
-                                        <p className="text-sm font-medium text-gray-900 shadow-none">
-                                            {data[index]}
+                                    <div style={{ background: "#1e2a3a", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 8, padding: "8px 12px" }}>
+                                        <p style={{ color: "#f1f5f9", fontSize: 13, fontWeight: 600, margin: 0 }}>
+                                            {item[index]}
                                         </p>
-                                        <p className="text-sm text-gray-500">
-                                            {valueFormatter(data[category])}
+                                        <p style={{ color: "#94a3b8", fontSize: 13, margin: 0 }}>
+                                            {valueFormatter(item[category])}
                                         </p>
                                     </div>
                                 )
@@ -68,7 +67,8 @@ const DonutChart = ({
                             <Cell
                                 key={`cell-${idx}`}
                                 fill={CHART_COLORS[idx % CHART_COLORS.length]}
-                                className="stroke-white dark:stroke-gray-950 transition-all duration-300 outline-none"
+                                className="transition-all duration-300 outline-none"
+                                stroke="transparent"
                             />
                         ))}
                     </Pie>

@@ -6,7 +6,7 @@
   transform: translate(-50%, -50%);
   width: 90%;
   max-width: 480px;
-  background: linear-gradient(145deg, #1f487e, #183a66) !important;
+  background: linear-gradient(145deg, #161c2d, #1a2236) !important;
   border-radius: 20px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -32,7 +32,7 @@
   
   /* Material UI Input overrides to match dark premium theme */
   .MuiInputBase-root {
-    background-color: rgba(20, 47, 82, 0.6) !important;
+    background-color: rgba(13, 17, 23, 0.6) !important;
     color: #ffffff !important;
     border-radius: 8px;
     width: 100%;
