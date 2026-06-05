@@ -11,7 +11,7 @@ interface Props {
     data: GroupedData[]
 }
 
-const ExpensesByTypeChart = ({ data }: Props) => {
+const ExpensesByCategoryChart = ({ data }: Props) => {
     const valueFormatter = (number: number) =>
         `$${Intl.NumberFormat("es-AR").format(number).toString()}`
 
@@ -19,18 +19,18 @@ const ExpensesByTypeChart = ({ data }: Props) => {
         <Card className="p-6 white-color rounded-2xl shadow-lg border-0">
             <Box mb={4}>
                 <Typography variant="h5" component="h2" className="text-gray-900 font-bold mb-1">
-                    Gastos por Tipo
+                    Gastos por Categoría
                 </Typography>
                 <Typography variant="body2" className="text-gray-500">
-                    Distribución de tus gastos según su clasificación
+                    Distribución de tus gastos según su categoría
                 </Typography>
             </Box>
-            <Box sx={{ height: 350, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <Box sx={{ height: 350, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                 <DonutChart
                     data={data}
                     category="total"
                     index="name"
-                    valueFormatter={(value: number) => valueFormatter(value)}
+                    valueFormatter={valueFormatter}
                     className="h-64"
                 />
 
@@ -55,4 +55,4 @@ const ExpensesByTypeChart = ({ data }: Props) => {
     )
 }
 
-export default ExpensesByTypeChart
+export default ExpensesByCategoryChart

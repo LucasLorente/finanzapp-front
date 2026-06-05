@@ -1,8 +1,12 @@
 import ExpensesByTypeChart from "@/app/components/ExpensesByTypeChart";
+import ExpensesByCategoryChart from "@/app/components/ExpensesByCategoryChart";
+import IncomeVsExpensesChart from "@/app/components/IncomeVsExpensesChart";
 import {
   fetchMonthlyExpenses,
   fetchTotalExpenses,
   fetchWeeklyExpenses,
+  fetchExpensesByType,
+  fetchExpensesByCategory,
 } from "@/services/api.expenses";
 import {
   fetchMonthlyIncomes,
@@ -20,6 +24,8 @@ export default async function HomePage() {
     totalIncomes,
     weeklyIncomes,
     monthlyIncomes,
+    expensesByType,
+    expensesByCategory,
   ] = await Promise.all([
     fetchTotalExpenses(),
     fetchWeeklyExpenses(),
@@ -27,6 +33,8 @@ export default async function HomePage() {
     fetchTotalIncomes(),
     fetchWeeklyIncomes(),
     fetchMonthlyIncomes(),
+    fetchExpensesByType(),
+    fetchExpensesByCategory(),
   ]);
 
   return (
@@ -34,7 +42,7 @@ export default async function HomePage() {
       <h1 className="text-6xl font-extrabold mb-10 text-white">
         Dashboard
       </h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
         <CardComponent
           title="Gastos"
@@ -54,10 +62,18 @@ export default async function HomePage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-1">
-          <ExpensesByTypeChart />
+          <ExpensesByTypeChart data={expensesByType} />
         </div>
-        <div className="lg:col-span-2 bg-white/10 backdrop-blur-md rounded-2xl p-8 flex items-center justify-center border border-white/20">
-          <p className="text-white/60 italic text-lg">Más estadísticas próximamente...</p>
+        <div className="lg:col-span-2 flex flex-col gap-10">
+          <IncomeVsExpensesChart
+            totalExpenses={totalExpenses}
+            weeklyExpenses={weeklyExpenses}
+            monthlyExpenses={monthlyExpenses}
+            totalIncomes={totalIncomes}
+            weeklyIncomes={weeklyIncomes}
+            monthlyIncomes={monthlyIncomes}
+          />
+          <ExpensesByCategoryChart data={expensesByCategory} />
         </div>
       </div>
     </div>

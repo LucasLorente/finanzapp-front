@@ -26,8 +26,8 @@ interface TransactionTableProps {
   weekly: number;
   monthly: number;
   total: number;
-  categories: ExpenseCategory[];
-  types: ExpenseType[];
+  categories?: ExpenseCategory[];
+  types?: ExpenseType[];
 }
 
 const TransactionTable: React.FC<TransactionTableProps> = ({
@@ -53,12 +53,11 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   };
 
   const getCategoryName = (id: number) => {
-    return categories.find((category) => category.id === id)?.name;
+    return categories?.find((category) => category.id === id)?.name;
   };
 
   const getTypeName = (id: number) => {
-    console.log('hola')
-    return types.find((type) => type.id === id)?.name;
+    return types?.find((type) => type.id === id)?.name;
   };
 
   const isIncome = type === "income";
