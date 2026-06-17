@@ -13,6 +13,8 @@ const ExpensesByCategoryChart = ({ data }: Props) => {
     const valueFormatter = (number: number) =>
         `$${Intl.NumberFormat("es-AR").format(number).toString()}`
 
+    const filtered = [...data].filter(item => item.total > 0).sort((a, b) => b.total - a.total)
+
     return (
         <div className="dark-card p-6">
             <div className="mb-4">
@@ -21,7 +23,7 @@ const ExpensesByCategoryChart = ({ data }: Props) => {
             </div>
             <div style={{ height: 350, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                 <DonutChart
-                    data={data}
+                    data={filtered}
                     category="total"
                     index="name"
                     valueFormatter={valueFormatter}
@@ -29,8 +31,8 @@ const ExpensesByCategoryChart = ({ data }: Props) => {
                 />
 
                 <div className="mt-4 w-full">
-                    <div className="grid grid-cols-2 gap-4">
-                        {data.map((item, index) => {
+                    <div className="grid grid-cols-4 gap-4">
+                        {filtered.map((item, index) => {
                             const color = CHART_COLORS[index % CHART_COLORS.length]
                             return (
                                 <div key={item.name} className="flex items-center space-x-2">

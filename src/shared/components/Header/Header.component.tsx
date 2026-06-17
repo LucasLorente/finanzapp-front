@@ -1,22 +1,29 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
+import styles from "./Header.styles.module.scss";
 
 const Header = () => {
+  const pathname = usePathname();
+
   return (
-    <div className="sticky top-0 z-50 min-h-20 flex justify-around items-center secondary-color border-b border-white/10">
+    <div className={`sticky top-0 z-50 min-h-20 flex justify-around items-center ${styles.header}`}>
       <Link
-        className="text-2xl font-bold text-slate-400 hover:text-white transition-colors duration-200 cursor-pointer"
+        className={`${styles["nav-link"]} ${pathname === "/expenses" ? styles["nav-link-active"] : ""}`}
         href="/expenses"
       >
         Gastos
       </Link>
-      <Link className="text-2xl font-bold text-white cursor-pointer" href="/">
+      <Link
+        className={`${styles.logo} ${pathname === "/" ? styles["logo-active"] : ""}`}
+        href="/"
+      >
         FinanzApp
       </Link>
       <Link
-        className="text-2xl font-bold text-slate-400 hover:text-white transition-colors duration-200 cursor-pointer"
+        className={`${styles["nav-link"]} ${pathname === "/incomes" ? styles["nav-link-active"] : ""}`}
         href="/incomes"
       >
         Ingresos

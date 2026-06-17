@@ -123,7 +123,7 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
         onClose={handleClose}
         aria-labelledby="modal-title"
       >
-        <div className="transaction-modal-container animate-fade-in-up">
+        <div className={`transaction-modal-container animate-fade-in-up ${isIncome ? "transaction-modal--income" : "transaction-modal--expense"}`}>
           <Typography id="modal-title" variant="h4" className="transaction-modal-title">
             {title}
           </Typography>
@@ -184,6 +184,7 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
                         name="typeId"
                         value={values.typeId}
                         onChange={handleChange}
+                        MenuProps={{ disablePortal: true }}
                       >
                         {expenseTypes.map((expenseType: any) => (
                           <MenuItem value={expenseType.id} key={expenseType.id}>
@@ -208,6 +209,7 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
                         name="categoryId"
                         value={values.categoryId}
                         onChange={handleChange}
+                        MenuProps={{ disablePortal: true }}
                       >
                         {categories.map((category: any) => (
                           <MenuItem value={category.id} key={category.id}>
@@ -225,8 +227,16 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
                 <div className="transaction-modal-actions">
                   <Button
                     onClick={handleClose}
-                    variant="text"
-                    color="inherit"
+                    variant="outlined"
+                    sx={{
+                      borderColor: "rgba(255,255,255,0.25)",
+                      color: "#94a3b8",
+                      borderRadius: "12px",
+                      "&:hover": {
+                        borderColor: "rgba(255,255,255,0.5)",
+                        backgroundColor: "rgba(255,255,255,0.05)",
+                      },
+                    }}
                   >
                     Cancelar
                   </Button>

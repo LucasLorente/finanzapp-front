@@ -1,4 +1,17 @@
 /* TransactionModal.component.scss */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 20px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+// ── Modal container ──────────────────────────────────────────────────────────
 .transaction-modal-container {
   position: absolute;
   top: 50%;
@@ -8,12 +21,73 @@
   max-width: 480px;
   background: linear-gradient(145deg, #161c2d, #1a2236) !important;
   border-radius: 20px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top-width: 3px;
   padding: 2.5rem;
   outline: none;
+  animation: fadeInUp 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  &.transaction-modal--income {
+    border-top-color: #4ade80;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 -2px 20px rgba(74, 222, 128, 0.08);
+  }
+
+  &.transaction-modal--expense {
+    border-top-color: #fb7185;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 -2px 20px rgba(251, 113, 133, 0.08);
+  }
+
+  // Dark Select dropdown — rendered in-modal via disablePortal
+  .MuiMenu-paper,
+  .MuiPopover-paper {
+    background-color: #161c2d !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .MuiMenuItem-root {
+    color: #cbd5e1 !important;
+    font-size: 0.925rem;
+
+    &:hover {
+      background-color: rgba(96, 165, 250, 0.1) !important;
+      color: #f1f5f9 !important;
+    }
+
+    &.Mui-selected {
+      background-color: rgba(96, 165, 250, 0.15) !important;
+      color: #60a5fa !important;
+
+      &:hover {
+        background-color: rgba(96, 165, 250, 0.2) !important;
+      }
+    }
+  }
+
+  .MuiMenu-paper::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .MuiMenu-paper::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem 1.25rem;
+    width: 95%;
+    border-radius: 16px;
+  }
 }
 
+// ── Title ────────────────────────────────────────────────────────────────────
 .transaction-modal-title {
   color: #ffffff;
   font-weight: 800 !important;
@@ -22,31 +96,93 @@
   text-align: center;
 }
 
+.transaction-modal--income .transaction-modal-title::after,
+.transaction-modal--expense .transaction-modal-title::after {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 3px;
+  border-radius: 2px;
+  margin: 0.5rem auto 0;
+}
+
+.transaction-modal--income .transaction-modal-title::after {
+  background: #4ade80;
+}
+
+.transaction-modal--expense .transaction-modal-title::after {
+  background: #fb7185;
+}
+
+// ── Form fields ──────────────────────────────────────────────────────────────
 .transaction-form-element {
   margin-bottom: 1.2rem !important;
   width: 100%;
-  
-  label {
-    color: #cbd5e1 !important;
+
+  .MuiFormLabel-root {
+    color: #94a3b8 !important;
   }
-  
-  /* Material UI Input overrides to match dark premium theme */
+
+  .MuiFormLabel-root.Mui-focused {
+    color: #60a5fa !important;
+  }
+
   .MuiInputBase-root {
     background-color: rgba(13, 17, 23, 0.6) !important;
     color: #ffffff !important;
     border-radius: 8px;
     width: 100%;
-    
+
     fieldset {
       border-color: rgba(255, 255, 255, 0.2) !important;
     }
-    
+
     &:hover fieldset {
       border-color: rgba(255, 255, 255, 0.5) !important;
     }
-    
+
     &.Mui-focused fieldset {
-      border-color: #60a5fa !important; /* light blue focus */
+      border-color: #60a5fa !important;
+    }
+  }
+
+  // MobileDatePicker uses MuiPickersTextField as outer wrapper
+  .MuiPickersTextField-root {
+    width: 100%;
+
+    .MuiInputBase-root {
+      background-color: rgba(13, 17, 23, 0.6) !important;
+      color: #ffffff !important;
+      border-radius: 8px;
+
+      fieldset {
+        border-color: rgba(255, 255, 255, 0.2) !important;
+      }
+
+      &:hover fieldset {
+        border-color: rgba(255, 255, 255, 0.5) !important;
+      }
+
+      &.Mui-focused fieldset {
+        border-color: #60a5fa !important;
+      }
+    }
+
+    .MuiFormLabel-root {
+      color: #94a3b8 !important;
+    }
+
+    .MuiFormLabel-root.Mui-focused {
+      color: #60a5fa !important;
+    }
+
+    .MuiInputAdornment-root button {
+      color: #94a3b8;
+
+      &:hover {
+        color: #f1f5f9;
+        background-color: rgba(255, 255, 255, 0.06);
+      }
     }
   }
 
@@ -55,20 +191,46 @@
   }
 }
 
+// ── Actions row ──────────────────────────────────────────────────────────────
 .transaction-modal-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  gap: 1rem;
 
   .btn-submit {
     border-radius: 12px;
     padding: 0.6rem 2.5rem;
     font-weight: 700;
     font-size: 1.05rem;
+    letter-spacing: 0.3px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+
+    &:not(:disabled):hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    &:disabled {
+      opacity: 0.45;
+    }
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+
+    .btn-submit,
+    button {
+      width: 100%;
+    }
   }
 }
 
+// ── Validation errors ─────────────────────────────────────────────────────────
 .form-error-message {
   color: #fca5a5;
   font-size: 0.85rem;

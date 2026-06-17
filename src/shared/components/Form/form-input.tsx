@@ -6,9 +6,6 @@ const FormInput = ({ field, name, value, ...props }: any) => {
     <TextField
       {...field}
       {...props}
-      InputProps={{
-        className: "white-color",
-      }}
     />
   );
 };
