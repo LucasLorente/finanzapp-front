@@ -1,9 +1,11 @@
 import axios from "@/config/api";
 import { Expense, ExpenseCategory, ExpenseType, GroupedData } from "@/types";
+import { DateRange, getDefaultDateRange } from "@/utils/date";
 
-const fetchExpenses = async (): Promise<Expense[]> => {
+const fetchExpenses = async (dateRange?: DateRange): Promise<Expense[]> => {
   try {
-    const { data: expenses } = await axios.get("/expenses");
+    const { startDate, endDate } = dateRange ?? getDefaultDateRange();
+    const { data: expenses } = await axios.get("/expenses", { params: { startDate, endDate } });
     return expenses;
   } catch (error) {
     console.error("Error al obtener gastos:", error);
@@ -11,9 +13,10 @@ const fetchExpenses = async (): Promise<Expense[]> => {
   }
 };
 
-const fetchTotalExpenses = async (): Promise<number> => {
+const fetchTotalExpenses = async (dateRange?: DateRange): Promise<number> => {
   try {
-    const { data: total } = await axios.get("/expenses/total");
+    const { startDate, endDate } = dateRange ?? getDefaultDateRange();
+    const { data: total } = await axios.get("/expenses/total", { params: { startDate, endDate } });
 
     if (total && total._sum) {
       return total._sum.amount;
@@ -27,9 +30,10 @@ const fetchTotalExpenses = async (): Promise<number> => {
   }
 };
 
-const fetchWeeklyExpenses = async (): Promise<number> => {
+const fetchWeeklyExpenses = async (dateRange?: DateRange): Promise<number> => {
   try {
-    const { data: weekly } = await axios.get("/expenses/weekly");
+    const { startDate, endDate } = dateRange ?? getDefaultDateRange();
+    const { data: weekly } = await axios.get("/expenses/weekly", { params: { startDate, endDate } });
 
     if (weekly && weekly._sum) {
       return weekly._sum.amount;
@@ -43,9 +47,10 @@ const fetchWeeklyExpenses = async (): Promise<number> => {
   }
 };
 
-const fetchMonthlyExpenses = async (): Promise<number> => {
+const fetchMonthlyExpenses = async (dateRange?: DateRange): Promise<number> => {
   try {
-    const { data: monthly } = await axios.get("/expenses/monthly");
+    const { startDate, endDate } = dateRange ?? getDefaultDateRange();
+    const { data: monthly } = await axios.get("/expenses/monthly", { params: { startDate, endDate } });
 
     if (monthly && monthly._sum) {
       return monthly._sum.amount;
@@ -79,9 +84,10 @@ const fetchExpensesTypes = async (): Promise<ExpenseType[]> => {
   }
 };
 
-const fetchExpensesByCategory = async (): Promise<GroupedData[]> => {
+const fetchExpensesByCategory = async (dateRange?: DateRange): Promise<GroupedData[]> => {
   try {
-    const { data } = await axios.get("/expenses/by-category");
+    const { startDate, endDate } = dateRange ?? getDefaultDateRange();
+    const { data } = await axios.get("/expenses/by-category", { params: { startDate, endDate } });
     return data;
   } catch (error) {
     console.error("Error al obtener gastos por categoría:", error);
@@ -89,9 +95,10 @@ const fetchExpensesByCategory = async (): Promise<GroupedData[]> => {
   }
 };
 
-const fetchExpensesByType = async (): Promise<GroupedData[]> => {
+const fetchExpensesByType = async (dateRange?: DateRange): Promise<GroupedData[]> => {
   try {
-    const { data } = await axios.get("/expenses/by-type");
+    const { startDate, endDate } = dateRange ?? getDefaultDateRange();
+    const { data } = await axios.get("/expenses/by-type", { params: { startDate, endDate } });
     return data;
   } catch (error) {
     console.error("Error al obtener gastos por tipo:", error);

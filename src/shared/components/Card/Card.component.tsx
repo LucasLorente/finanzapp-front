@@ -17,15 +17,11 @@ import TransactionModal from "@/shared/components/Modal/TransactionModal.compone
 const CardComponent = ({
   title,
   redirect,
-  total,
-  weekly,
-  monthly,
+  total
 }: {
   title: string;
   redirect: string;
   total: number;
-  weekly: number;
-  monthly: number;
 }) => {
   const isIncome = title.toLowerCase() === "ingresos";
   const typeClass = isIncome ? "income" : "expense";
@@ -50,26 +46,6 @@ const CardComponent = ({
           >
             ${total?.toLocaleString("es-AR") || 0}
           </Typography>
-        </Box>
-
-        <Box className="stats-grid">
-          <Box className="stat-box">
-            <Typography variant="caption" display="block" color="text.secondary" className="stat-label">
-              Mensual
-            </Typography>
-            <Typography variant="subtitle1" color="text.primary" className="stat-value">
-              ${monthly?.toLocaleString("es-AR") || 0}
-            </Typography>
-          </Box>
-          <Divider orientation="vertical" flexItem className="divider" />
-          <Box className="stat-box">
-            <Typography variant="caption" display="block" color="text.secondary" className="stat-label">
-              Semanal
-            </Typography>
-            <Typography variant="subtitle1" color="text.primary" className="stat-value">
-              ${weekly?.toLocaleString("es-AR") || 0}
-            </Typography>
-          </Box>
         </Box>
       </CardContent>
 

@@ -29,8 +29,8 @@
 }
 
 .card-content {
-    padding: 24px !important;
-    padding-bottom: 16px !important;
+    padding: 32px !important;
+    padding-bottom: 20px !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -82,7 +82,7 @@
 }
 
 .total-container {
-    margin-bottom: 24px;
+    margin-bottom: 32px;
 }
 
 .total-label {
@@ -121,7 +121,7 @@
 .stat-box {
     flex: 1;
     background-color: rgba(255, 255, 255, 0.04);
-    padding: 12px;
+    padding: 16px;
     border-radius: 8px;
 }
 
@@ -143,9 +143,9 @@
 }
 
 .card-actions {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-    padding-bottom: 24px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-bottom: 32px !important;
     padding-top: 0 !important;
     display: flex !important;
     gap: 8px !important;
@@ -162,10 +162,8 @@
 }
 
 .action-btn {
-    flex: 1;
-    width: 100%;
     border-radius: 12px !important;
-    padding: 10px 0 !important;
+    padding: 10px !important;
     font-weight: 800 !important;
     text-transform: none !important;
     font-size: 1rem !important;

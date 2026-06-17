@@ -21,8 +21,6 @@ interface TransactionTableProps {
   title: string;
   data: Expense[];
   type: "income" | "expense";
-  weekly: number;
-  monthly: number;
   total: number;
   categories?: ExpenseCategory[];
   types?: ExpenseType[];
@@ -34,8 +32,6 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   title,
   data,
   type,
-  weekly,
-  monthly,
   total,
   categories,
   types,
@@ -128,14 +124,6 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
             <TableRow>
               <TableCell colSpan={colCount}>
                 <div className="summary-bar">
-                  <div className="summary-item">
-                    <span className="summary-label">Semanal</span>
-                    <span className={`summary-value ${amountClass}`}>{fmt(weekly || 0)}</span>
-                  </div>
-                  <div className="summary-item">
-                    <span className="summary-label">Mensual</span>
-                    <span className={`summary-value ${amountClass}`}>{fmt(monthly || 0)}</span>
-                  </div>
                   <div className="summary-item summary-total">
                     <span className="summary-label">Total acumulado</span>
                     <span className={`summary-value ${amountClass}`}>{fmt(total || 0)}</span>

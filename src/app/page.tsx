@@ -1,87 +1,78 @@
 import ExpensesByTypeChart from "@/app/components/ExpensesByTypeChart";
 import ExpensesByCategoryChart from "@/app/components/ExpensesByCategoryChart";
-import IncomeVsExpensesChart from "@/app/components/IncomeVsExpensesChart";
 import {
-  fetchMonthlyExpenses,
   fetchTotalExpenses,
-  fetchWeeklyExpenses,
   fetchExpensesByType,
   fetchExpensesByCategory,
 } from "@/services/api.expenses";
 import {
-  fetchMonthlyIncomes,
   fetchTotalIncomes,
-  fetchWeeklyIncomes,
 } from "@/services/api.incomes";
 import CardComponent from "@/shared/components/Card/Card.component";
 import BalanceCard from "@/shared/components/Card/BalanceCard.component";
-import React from "react";
+import MonthSelector from "@/shared/components/MonthSelector/MonthSelector.component";
+import { getDefaultDateRange, getDateRangeForMonth } from "@/utils/date";
+import { Suspense } from "react";
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ month?: string }>;
+}) {
+  const { month } = await searchParams;
+  const dateRange = month ? getDateRangeForMonth(month) : getDefaultDateRange();
+
   const [
     totalExpenses,
-    weeklyExpenses,
-    monthlyExpenses,
     totalIncomes,
-    weeklyIncomes,
-    monthlyIncomes,
     expensesByType,
     expensesByCategory,
   ] = await Promise.all([
-    fetchTotalExpenses(),
-    fetchWeeklyExpenses(),
-    fetchMonthlyExpenses(),
-    fetchTotalIncomes(),
-    fetchWeeklyIncomes(),
-    fetchMonthlyIncomes(),
-    fetchExpensesByType(),
-    fetchExpensesByCategory(),
+    fetchTotalExpenses(dateRange),
+    fetchTotalIncomes(dateRange),
+    fetchExpensesByType(dateRange),
+    fetchExpensesByCategory(dateRange),
   ]);
 
   const totalBalance = totalIncomes - totalExpenses;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      <h1 className="text-6xl font-extrabold mb-10 text-white">
-        Dashboard
-      </h1>
+
+      <Suspense fallback={null}>
+        <MonthSelector />
+      </Suspense>
 
       <div className="mb-6">
         <BalanceCard total={totalBalance} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 items-stretch">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
         <CardComponent
           title="Gastos"
           redirect="/expenses"
           total={totalExpenses}
-          weekly={weeklyExpenses}
-          monthly={monthlyExpenses}
         ></CardComponent>
         <CardComponent
           title="Ingresos"
           redirect="/incomes"
           total={totalIncomes}
-          weekly={weeklyIncomes}
-          monthly={monthlyIncomes}
         ></CardComponent>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1">
-          <ExpensesByTypeChart data={expensesByType} />
-        </div>
-        <div className="lg:col-span-2 flex flex-col gap-10">
-          <IncomeVsExpensesChart
-            totalExpenses={totalExpenses}
-            weeklyExpenses={weeklyExpenses}
-            monthlyExpenses={monthlyExpenses}
-            totalIncomes={totalIncomes}
-            weeklyIncomes={weeklyIncomes}
-            monthlyIncomes={monthlyIncomes}
-          />
-          <ExpensesByCategoryChart data={expensesByCategory} />
-        </div>
+        {(totalExpenses > 0 || totalIncomes > 0) && (
+          <>
+            <div className="lg:col-span-1">
+              <ExpensesByTypeChart data={expensesByType} />
+            </div>
+            <div className="lg:col-span-2 flex flex-col gap-10">
+              {expensesByCategory.length > 0 && (
+                <ExpensesByCategoryChart data={expensesByCategory} />
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
