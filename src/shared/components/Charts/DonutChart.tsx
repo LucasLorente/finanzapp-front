@@ -1,7 +1,6 @@
 "use client"
 
 import {
-    Cell,
     Pie,
     PieChart,
     ResponsiveContainer,
@@ -12,12 +11,13 @@ import { cx } from "@/lib/utils"
 const CHART_COLORS = ["#38bdf8", "#4ade80", "#fb7185", "#fbbf24", "#a78bfa", "#f97316"]
 
 interface DonutChartProps {
-    data: { name: string; total: number; [key: string]: unknown }[]
+    data: Record<string, unknown>[]
     category: string
     index: string
     variant?: "donut" | "pie"
     className?: string
     valueFormatter?: (value: number) => string
+    colors?: string[]
 }
 
 const DonutChart = ({
@@ -27,7 +27,14 @@ const DonutChart = ({
     variant = "donut",
     className,
     valueFormatter = (value: number) => value.toString(),
+    colors,
 }: DonutChartProps) => {
+    const palette = colors ?? CHART_COLORS
+    const coloredData = data.map((item, idx) => ({
+        ...item,
+        fill: palette[idx % palette.length],
+    }))
+
     return (
         <div className={cx("h-80 w-full", className)}>
             <ResponsiveContainer width="100%" height="100%">
@@ -51,7 +58,7 @@ const DonutChart = ({
                         }}
                     />
                     <Pie
-                        data={data}
+                        data={coloredData}
                         cx="50%"
                         cy="50%"
                         startAngle={90}
@@ -62,16 +69,8 @@ const DonutChart = ({
                         dataKey={category}
                         nameKey={index}
                         isAnimationActive={true}
-                    >
-                        {data.map((_, idx) => (
-                            <Cell
-                                key={`cell-${idx}`}
-                                fill={CHART_COLORS[idx % CHART_COLORS.length]}
-                                className="transition-all duration-300 outline-none"
-                                stroke="transparent"
-                            />
-                        ))}
-                    </Pie>
+                        stroke="transparent"
+                    />
                 </PieChart>
             </ResponsiveContainer>
         </div>

@@ -20,9 +20,10 @@ interface TransactionModalProps {
   type: "income" | "expense";
   buttonText: string;
   title: string;
+  triggerClassName?: string;
 }
 
-export default function TransactionModal({ type, buttonText, title }: TransactionModalProps) {
+export default function TransactionModal({ type, buttonText, title, triggerClassName }: TransactionModalProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -112,6 +113,7 @@ export default function TransactionModal({ type, buttonText, title }: Transactio
         color={isIncome ? "success" : "error"}
         variant="contained"
         onClick={handleOpen}
+        className={triggerClassName}
       >
         {buttonText}
       </Button>

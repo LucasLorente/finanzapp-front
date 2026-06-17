@@ -14,6 +14,7 @@ import {
   fetchWeeklyIncomes,
 } from "@/services/api.incomes";
 import CardComponent from "@/shared/components/Card/Card.component";
+import BalanceCard from "@/shared/components/Card/BalanceCard.component";
 import React from "react";
 
 export default async function HomePage() {
@@ -37,13 +38,19 @@ export default async function HomePage() {
     fetchExpensesByCategory(),
   ]);
 
+  const totalBalance = totalIncomes - totalExpenses;
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
       <h1 className="text-6xl font-extrabold mb-10 text-white">
         Dashboard
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 items-stretch">
+      <div className="mb-6">
+        <BalanceCard total={totalBalance} />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 items-stretch">
         <CardComponent
           title="Gastos"
           redirect="/expenses"

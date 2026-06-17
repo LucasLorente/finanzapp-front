@@ -12,6 +12,7 @@ import {
 import Link from "next/link";
 import React from "react";
 import "./Card.styles.scss";
+import TransactionModal from "@/shared/components/Modal/TransactionModal.component";
 
 const CardComponent = ({
   title,
@@ -40,15 +41,9 @@ const CardComponent = ({
           >
             {title}
           </Typography>
-          <Box className={`summary-badge ${typeClass}`}>
-            Resumen
-          </Box>
         </Box>
 
         <Box className="total-container">
-          <Typography variant="body2" color="text.secondary" className="total-label">
-            Promedio General
-          </Typography>
           <Typography
             variant="h3"
             className={`main-total ${typeClass}`}
@@ -81,14 +76,19 @@ const CardComponent = ({
       <CardActions className="card-actions">
         <Link href={redirect} passHref className="action-link">
           <Button
-            fullWidth
-            variant="contained"
+            variant="outlined"
             disableElevation
-            className={`action-btn ${typeClass}`}
+            className={`action-btn details-button`}
           >
             Ver Detalles
           </Button>
         </Link>
+        <TransactionModal
+          type={isIncome ? "income" : "expense"}
+          buttonText={isIncome ? "Añadir Ingreso" : "Añadir Gasto"}
+          title={isIncome ? "Agregar Ingreso" : "Agregar Gasto"}
+          triggerClassName={`action-btn`}
+        />
       </CardActions>
     </Card>
   );
