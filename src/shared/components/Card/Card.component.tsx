@@ -1,5 +1,6 @@
 "use client";
 
+import { useCurrency } from "@/context/CurrencyContext";
 import {
   Button,
   Card,
@@ -23,6 +24,7 @@ const CardComponent = ({
   redirect: string;
   total: number;
 }) => {
+  const { formatAmount } = useCurrency();
   const isIncome = title.toLowerCase() === "ingresos";
   const typeClass = isIncome ? "income" : "expense";
 
@@ -44,7 +46,7 @@ const CardComponent = ({
             variant="h3"
             className={`main-total ${typeClass}`}
           >
-            ${total?.toLocaleString("es-AR") || 0}
+            {formatAmount(total || 0)}
           </Typography>
         </Box>
       </CardContent>

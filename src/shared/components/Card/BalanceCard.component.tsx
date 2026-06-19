@@ -1,10 +1,12 @@
 "use client";
 
+import { useCurrency } from "@/context/CurrencyContext";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import React from "react";
 import "./Card.styles.scss";
 
 const BalanceCard = ({ total }: { total: number }) => {
+  const { formatAmount } = useCurrency();
   return (
     <Card className={`card-wrapper`}>
       <CardContent className="card-content">
@@ -16,7 +18,7 @@ const BalanceCard = ({ total }: { total: number }) => {
 
         <Box className="total-container" sx={{ mb: 0 }}>
           <Typography variant="h3" className={`main-total text-blue-400`}>
-            ${total?.toLocaleString("es-AR") || 0}
+            {formatAmount(total || 0)}
           </Typography>
         </Box>
       </CardContent>

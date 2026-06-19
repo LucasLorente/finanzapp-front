@@ -1,5 +1,6 @@
 "use client";
 
+import { useCurrency } from "@/context/CurrencyContext";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -7,6 +8,7 @@ import styles from "./Header.styles.module.scss";
 
 const Header = () => {
   const pathname = usePathname();
+  const { currency, toggleCurrency } = useCurrency();
 
   return (
     <div className={`sticky top-0 z-50 min-h-20 flex justify-around items-center ${styles.header}`}>
@@ -28,6 +30,9 @@ const Header = () => {
       >
         Ingresos
       </Link>
+      <button onClick={toggleCurrency} className={styles["currency-toggle"]}>
+        {currency}
+      </button>
     </div>
   );
 };

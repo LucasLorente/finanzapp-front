@@ -1,5 +1,6 @@
 "use client"
 
+import { useCurrency } from "@/context/CurrencyContext"
 import { DonutChart } from "@/shared/components/Charts/DonutChart"
 import { GroupedData } from "@/types"
 
@@ -15,8 +16,8 @@ interface Props {
 }
 
 const ExpensesByTypeChart = ({ data }: Props) => {
-    const valueFormatter = (number: number) =>
-        `$${Intl.NumberFormat("es-AR").format(number).toString()}`
+    const { formatAmount } = useCurrency()
+    const valueFormatter = formatAmount
 
     let fallbackIdx = 0
     const colors = data.map((item) =>

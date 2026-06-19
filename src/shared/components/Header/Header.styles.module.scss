@@ -47,3 +47,19 @@
   border-bottom: 2px solid #6290C8;
   border-radius: 0;
 }
+
+.currency-toggle {
+  color: #6290C8;
+  border: 1px solid #6290C8;
+  background: transparent;
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    background: rgba(98, 144, 200, 0.15);
+  }
+}

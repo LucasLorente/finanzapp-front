@@ -1,5 +1,6 @@
 "use client";
 
+import { useCurrency } from "@/context/CurrencyContext";
 import { Expense, ExpenseCategory, ExpenseType } from "@/types";
 import {
   Chip,
@@ -26,8 +27,6 @@ interface TransactionTableProps {
   types?: ExpenseType[];
 }
 
-const fmt = (n: number) => `$${Intl.NumberFormat("es-AR").format(n)}`;
-
 const TransactionTable: React.FC<TransactionTableProps> = ({
   title,
   data,
@@ -36,6 +35,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
   categories,
   types,
 }) => {
+  const { formatAmount } = useCurrency();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -103,7 +103,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                     </TableCell>
                   )}
                   <TableCell align="right" className={amountClass}>
-                    {fmt(item.amount)}
+                    {formatAmount(item.amount)}
                   </TableCell>
                 </TableRow>
               ))}
@@ -126,7 +126,7 @@ const TransactionTable: React.FC<TransactionTableProps> = ({
                 <div className="summary-bar">
                   <div className="summary-item summary-total">
                     <span className="summary-label">Total acumulado</span>
-                    <span className={`summary-value ${amountClass}`}>{fmt(total || 0)}</span>
+                    <span className={`summary-value ${amountClass}`}>{formatAmount(total || 0)}</span>
                   </div>
                 </div>
               </TableCell>

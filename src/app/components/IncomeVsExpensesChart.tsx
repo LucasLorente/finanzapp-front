@@ -1,5 +1,6 @@
 "use client"
 
+import { useCurrency } from "@/context/CurrencyContext"
 import { BarChart } from "@/shared/components/Charts/BarChart"
 
 interface Props {
@@ -24,8 +25,8 @@ const IncomeVsExpensesChart = ({
     weeklyIncomes,
     monthlyIncomes,
 }: Props) => {
-    const valueFormatter = (number: number) =>
-        `$${Intl.NumberFormat("es-AR").format(number).toString()}`
+    const { formatAmount } = useCurrency()
+    const valueFormatter = formatAmount
 
     const data = [
         { name: "Total", incomes: totalIncomes, expenses: totalExpenses },

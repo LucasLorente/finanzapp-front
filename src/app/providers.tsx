@@ -1,12 +1,21 @@
 "use client";
 
+import { CurrencyProvider } from "@/context/CurrencyContext";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import React from "react";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+interface ProvidersProps {
+  children: React.ReactNode;
+  dolarRate: number;
+}
+
+export function Providers({ children, dolarRate }: ProvidersProps) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {children}
+      <CurrencyProvider dolarRate={dolarRate}>
+        {children}
+      </CurrencyProvider>
     </LocalizationProvider>
   );
 }

@@ -22,6 +22,7 @@ export interface Expense {
 export interface GroupedData {
   name: string;
   total: number;
+  [key: string]: unknown;
 }
 
 export interface DolarRate {

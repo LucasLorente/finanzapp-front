@@ -1,5 +1,6 @@
 "use client"
 
+import { useCurrency } from "@/context/CurrencyContext"
 import { DonutChart } from "@/shared/components/Charts/DonutChart"
 import { GroupedData } from "@/types"
 
@@ -10,8 +11,8 @@ interface Props {
 }
 
 const ExpensesByCategoryChart = ({ data }: Props) => {
-    const valueFormatter = (number: number) =>
-        `$${Intl.NumberFormat("es-AR").format(number).toString()}`
+    const { formatAmount } = useCurrency()
+    const valueFormatter = formatAmount
 
     const filtered = [...data].filter(item => item.total > 0).sort((a, b) => b.total - a.total)
 
