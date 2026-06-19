@@ -10,6 +10,7 @@ import {
 } from "@/services/api.incomes";
 import CardComponent from "@/shared/components/Card/Card.component";
 import BalanceCard from "@/shared/components/Card/BalanceCard.component";
+import DolarRate from "@/shared/components/DolarRate/DolarRate.component";
 import MonthSelector from "@/shared/components/MonthSelector/MonthSelector.component";
 import { getDefaultDateRange, getDateRangeForMonth } from "@/utils/date";
 import { Suspense } from "react";
@@ -47,7 +48,7 @@ export default async function HomePage({
         <BalanceCard total={totalBalance} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <CardComponent
           title="Gastos"
           redirect="/expenses"
@@ -58,6 +59,7 @@ export default async function HomePage({
           redirect="/incomes"
           total={totalIncomes}
         ></CardComponent>
+        <DolarRate />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

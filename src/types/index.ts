@@ -23,3 +23,12 @@ export interface GroupedData {
   name: string;
   total: number;
 }
+
+export interface DolarRate {
+  moneda: string;
+  casa: string;
+  nombre: string;
+  compra: number;
+  venta: number;
+  fechaActualizacion: string;
+}
