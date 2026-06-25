@@ -106,6 +106,15 @@ const fetchExpensesByType = async (dateRange?: DateRange): Promise<GroupedData[]
   }
 };
 
+const deleteExpense = async (id: number): Promise<void> => {
+  try {
+    await axios.delete(`/expenses/${id}`);
+  } catch (error) {
+    console.error("Error al eliminar el gasto:", error);
+    throw new Error("Error al eliminar el gasto");
+  }
+};
+
 export {
   fetchExpenses,
   fetchExpensesCategories,
@@ -115,4 +124,5 @@ export {
   fetchWeeklyExpenses,
   fetchExpensesByCategory,
   fetchExpensesByType,
+  deleteExpense,
 };

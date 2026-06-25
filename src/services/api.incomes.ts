@@ -64,9 +64,19 @@ const fetchMonthlyIncomes = async (dateRange?: DateRange): Promise<number> => {
   }
 };
 
+const deleteIncome = async (id: number): Promise<void> => {
+  try {
+    await axios.delete(`/incomes/${id}`);
+  } catch (error) {
+    console.error("Error al eliminar el ingreso:", error);
+    throw new Error("Error al eliminar el ingreso");
+  }
+};
+
 export {
   fetchIncomes,
   fetchMonthlyIncomes,
   fetchTotalIncomes,
   fetchWeeklyIncomes,
+  deleteIncome,
 };

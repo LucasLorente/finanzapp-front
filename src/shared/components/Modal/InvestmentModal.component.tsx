@@ -21,15 +21,41 @@ interface InvestmentModalProps {
   buttonText: string;
   title: string;
   triggerClassName?: string;
+  open?: boolean;
+  onClose?: () => void;
+  initialData?: {
+    id: number;
+    description?: string;
+    amount_invested: number;
+    current_value: number;
+    date: Date;
+    typeId: number;
+    categoryId: number;
+    ticker?: string;
+  };
 }
 
-export default function InvestmentModal({ buttonText, title, triggerClassName }: InvestmentModalProps) {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+export default function InvestmentModal({
+  buttonText,
+  title,
+  triggerClassName,
+  open: controlledOpen,
+  onClose: controlledOnClose,
+  initialData,
+}: InvestmentModalProps) {
+  const [selfOpen, setSelfOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen! : selfOpen;
+  const handleOpen = () => setSelfOpen(true);
+  const handleClose = () => {
+    if (isControlled) controlledOnClose?.();
+    else setSelfOpen(false);
+  };
 
   const [categories, setCategories] = useState<InvestmentCategory[]>([]);
   const [investmentTypes, setInvestmentTypes] = useState<InvestmentType[]>([]);
+
+  const isEditMode = !!initialData;
 
   const selectMenuProps = {
     PaperProps: {
@@ -62,13 +88,13 @@ export default function InvestmentModal({ buttonText, title, triggerClassName }:
   };
 
   const initialValues = {
-    description: "",
-    amount_invested: "",
-    current_value: "",
-    date: dayjs(),
-    categoryId: "",
-    typeId: "",
-    ticker: "",
+    description: initialData?.description ?? "",
+    amount_invested: initialData?.amount_invested ?? "",
+    current_value: initialData?.current_value ?? "",
+    date: initialData?.date ? dayjs(initialData.date) : dayjs(),
+    categoryId: initialData?.categoryId ?? "",
+    typeId: initialData?.typeId ?? "",
+    ticker: initialData?.ticker ?? "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -112,18 +138,22 @@ export default function InvestmentModal({ buttonText, title, triggerClassName }:
     fetchTypes();
   }, [open]);
 
-  const handleSubmit = async (values: typeof initialValues, { resetForm, setSubmitting }: { resetForm: () => void; setSubmitting: (v: boolean) => void }) => {
+  const handleSubmit = async (values: any, { resetForm, setSubmitting }: { resetForm: () => void; setSubmitting: (v: boolean) => void }) => {
     try {
       const dataToSubmit = {
         ...values,
         ticker: values.ticker || undefined,
       };
-      await axios.post("/investments", dataToSubmit);
+      if (isEditMode) {
+        await axios.put(`/investments/${initialData!.id}`, dataToSubmit);
+      } else {
+        await axios.post("/investments", dataToSubmit);
+      }
       resetForm();
       handleClose();
       window.location.reload();
     } catch (error) {
-      console.error("Error al crear la inversión:", error);
+      console.error(`Error al ${isEditMode ? "actualizar" : "crear"} la inversión:`, error);
     } finally {
       setSubmitting(false);
     }
@@ -131,14 +161,16 @@ export default function InvestmentModal({ buttonText, title, triggerClassName }:
 
   return (
     <>
-      <Button
-        color="primary"
-        variant="contained"
-        onClick={handleOpen}
-        className={triggerClassName}
-      >
-        {buttonText}
-      </Button>
+      {!isControlled && (
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={handleOpen}
+          className={triggerClassName}
+        >
+          {buttonText}
+        </Button>
+      )}
 
       <Modal
         open={open}
@@ -154,6 +186,7 @@ export default function InvestmentModal({ buttonText, title, triggerClassName }:
             initialValues={initialValues}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
+            enableReinitialize
           >
             {({ isSubmitting, values, setFieldValue, isValid, handleChange }) => (
               <Form className="flex flex-col">
@@ -204,7 +237,7 @@ export default function InvestmentModal({ buttonText, title, triggerClassName }:
                     label="Fecha"
                     name="date"
                     format="DD/MM/YYYY"
-                    defaultValue={values.date}
+                    value={values.date}
                     onChange={(value) => setFieldValue("date", value)}
                     className="w-full"
                   />
@@ -291,7 +324,7 @@ export default function InvestmentModal({ buttonText, title, triggerClassName }:
                     disabled={isSubmitting || !isValid}
                     className="btn-submit"
                   >
-                    {isSubmitting ? "Guardando..." : "Crear"}
+                    {isSubmitting ? "Guardando..." : isEditMode ? "Actualizar" : "Crear"}
                   </Button>
                 </div>
               </Form>

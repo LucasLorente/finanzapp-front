@@ -68,10 +68,20 @@ const createInvestment = async (data: {
   }
 };
 
+const deleteInvestment = async (id: number): Promise<void> => {
+  try {
+    await axios.delete(`/investments/${id}`);
+  } catch (error) {
+    console.error("Error al eliminar la inversión:", error);
+    throw new Error("Error al eliminar la inversión");
+  }
+};
+
 export {
   fetchInvestments,
   fetchTotalInvestments,
   fetchInvestmentCategories,
   fetchInvestmentTypes,
   createInvestment,
+  deleteInvestment,
 };

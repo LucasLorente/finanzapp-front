@@ -21,17 +21,41 @@ interface TransactionModalProps {
   buttonText: string;
   title: string;
   triggerClassName?: string;
+  open?: boolean;
+  onClose?: () => void;
+  initialData?: {
+    id: number;
+    description?: string;
+    amount: number;
+    date: Date;
+    categoryId?: number;
+    typeId?: number;
+  };
 }
 
-export default function TransactionModal({ type, buttonText, title, triggerClassName }: TransactionModalProps) {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+export default function TransactionModal({
+  type,
+  buttonText,
+  title,
+  triggerClassName,
+  open: controlledOpen,
+  onClose: controlledOnClose,
+  initialData,
+}: TransactionModalProps) {
+  const [selfOpen, setSelfOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen! : selfOpen;
+  const handleOpen = () => setSelfOpen(true);
+  const handleClose = () => {
+    if (isControlled) controlledOnClose?.();
+    else setSelfOpen(false);
+  };
 
   const [categories, setCategories] = useState([]);
   const [expenseTypes, setExpenseTypes] = useState([]);
 
   const isIncome = type === "income";
+  const isEditMode = !!initialData;
 
   const selectMenuProps = {
     PaperProps: {
@@ -67,11 +91,11 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
   const submitEndpoint = isIncome ? "/incomes" : "/expenses";
 
   const initialValues = {
-    description: "",
-    amount: "",
-    date: dayjs(),
-    categoryId: "",
-    typeId: "",
+    description: initialData?.description ?? "",
+    amount: initialData?.amount ?? "",
+    date: initialData?.date ? dayjs(initialData.date) : dayjs(),
+    categoryId: initialData?.categoryId ?? "",
+    typeId: initialData?.typeId ?? "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -124,14 +148,16 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
         delete dataToSubmit.typeId;
       }
 
-      console.log(dataToSubmit)
-      await axios.post(submitEndpoint, dataToSubmit);
+      if (isEditMode) {
+        await axios.put(`${submitEndpoint}/${initialData!.id}`, dataToSubmit);
+      } else {
+        await axios.post(submitEndpoint, dataToSubmit);
+      }
       resetForm();
       handleClose();
-      // Refrescamos para visualizar el elemento nuevo en la tabla (alternativa a Server Actions en Next js)
       window.location.reload();
     } catch (error) {
-      console.error(`Error al crear ${type}:`, error);
+      console.error(`Error al ${isEditMode ? "actualizar" : "crear"} ${type}:`, error);
     } finally {
       setSubmitting(false);
     }
@@ -139,14 +165,16 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
 
   return (
     <>
-      <Button
-        color={isIncome ? "success" : "error"}
-        variant="contained"
-        onClick={handleOpen}
-        className={triggerClassName}
-      >
-        {buttonText}
-      </Button>
+      {!isControlled && (
+        <Button
+          color={isIncome ? "success" : "error"}
+          variant="contained"
+          onClick={handleOpen}
+          className={triggerClassName}
+        >
+          {buttonText}
+        </Button>
+      )}
 
       <Modal
         open={open}
@@ -162,6 +190,7 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
             initialValues={initialValues}
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
+            enableReinitialize
           >
             {({ isSubmitting, values, setFieldValue, isValid, handleChange }) => (
               <Form className="flex flex-col">
@@ -198,7 +227,7 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
                     label="Fecha"
                     name="date"
                     format="DD/MM/YYYY"
-                    defaultValue={values.date}
+                    value={values.date}
                     onChange={(value) => setFieldValue("date", value)}
                     className="w-full"
                   />
@@ -224,7 +253,7 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
                       </Select>
                     </FormControl>
                     <div className="form-error-message">
-                      <ErrorMessage name="categoryId" />
+                      <ErrorMessage name="typeId" />
                     </div>
                   </div>
                 )}
@@ -278,7 +307,7 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
                     disabled={isSubmitting || !isValid}
                     className="btn-submit"
                   >
-                    {isSubmitting ? "Guardando..." : "Crear"}
+                    {isSubmitting ? "Guardando..." : isEditMode ? "Actualizar" : "Crear"}
                   </Button>
                 </div>
               </Form>
