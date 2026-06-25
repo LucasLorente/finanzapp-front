@@ -36,6 +36,12 @@ const Header = () => {
       >
         Inversiones
       </Link>
+      <Link
+        className={`${styles["nav-link"]} ${pathname === "/settings" ? styles["nav-link-active"] : ""}`}
+        href="/settings"
+      >
+        Configurar
+      </Link>
       <button onClick={toggleCurrency} className={styles["currency-toggle"]}>
         {currency}
       </button>
