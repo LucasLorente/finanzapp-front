@@ -3,7 +3,7 @@ import { ExpenseCategory, ExpenseType, InvestmentCategory, InvestmentType } from
 
 // ── Expense Categories ──────────────────────────────────────────────────────
 
-const fetchExpenseCategoriesSettings = async (): Promise<ExpenseCategory[]> => {
+const fetchExpenseCategories = async (): Promise<ExpenseCategory[]> => {
   try {
     const { data } = await axios.get("/expenses-category");
     return data;
@@ -44,7 +44,7 @@ const deleteExpenseCategory = async (id: number): Promise<void> => {
 
 // ── Expense Types ───────────────────────────────────────────────────────────
 
-const fetchExpenseTypesSettings = async (): Promise<ExpenseType[]> => {
+const fetchExpenseTypes = async (): Promise<ExpenseType[]> => {
   try {
     const { data } = await axios.get("/expenses-type");
     return data;
@@ -85,7 +85,7 @@ const deleteExpenseType = async (id: number): Promise<void> => {
 
 // ── Investment Categories ───────────────────────────────────────────────────
 
-const fetchInvestmentCategoriesSettings = async (): Promise<InvestmentCategory[]> => {
+const fetchInvestmentCategories = async (): Promise<InvestmentCategory[]> => {
   try {
     const { data } = await axios.get("/investment-category");
     return data;
@@ -126,7 +126,7 @@ const deleteInvestmentCategory = async (id: number): Promise<void> => {
 
 // ── Investment Types ────────────────────────────────────────────────────────
 
-const fetchInvestmentTypesSettings = async (): Promise<InvestmentType[]> => {
+const fetchInvestmentTypes = async (): Promise<InvestmentType[]> => {
   try {
     const { data } = await axios.get("/investment-type");
     return data;
@@ -166,19 +166,19 @@ const deleteInvestmentType = async (id: number): Promise<void> => {
 };
 
 export {
-  fetchExpenseCategoriesSettings,
+  fetchExpenseCategories,
   createExpenseCategory,
   updateExpenseCategory,
   deleteExpenseCategory,
-  fetchExpenseTypesSettings,
+  fetchExpenseTypes,
   createExpenseType,
   updateExpenseType,
   deleteExpenseType,
-  fetchInvestmentCategoriesSettings,
+  fetchInvestmentCategories,
   createInvestmentCategory,
   updateInvestmentCategory,
   deleteInvestmentCategory,
-  fetchInvestmentTypesSettings,
+  fetchInvestmentTypes,
   createInvestmentType,
   updateInvestmentType,
   deleteInvestmentType,
