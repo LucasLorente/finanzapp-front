@@ -1,0 +1,82 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 20px));
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.investment-modal-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 480px;
+  background: linear-gradient(145deg, #161c2d, #1a2236) !important;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1),
+              0 -2px 20px rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 3px solid #818cf8;
+  padding: 2.5rem;
+  outline: none;
+  animation: fadeInUp 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+  overflow-y: auto;
+  max-height: 90vh;
+
+  .MuiMenu-paper,
+  .MuiPopover-paper {
+    background-color: #161c2d !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .MuiMenuItem-root {
+    color: #cbd5e1 !important;
+    font-size: 0.925rem;
+
+    &:hover {
+      background-color: rgba(129, 140, 248, 0.1) !important;
+      color: #f1f5f9 !important;
+    }
+
+    &.Mui-selected {
+      background-color: rgba(129, 140, 248, 0.15) !important;
+      color: #818cf8 !important;
+
+      &:hover {
+        background-color: rgba(129, 140, 248, 0.2) !important;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem 1.25rem;
+    width: 95%;
+    border-radius: 16px;
+  }
+}
+
+.investment-modal-title {
+  color: #ffffff;
+  font-weight: 800 !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem !important;
+  text-align: center;
+
+  &::after {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 3px;
+    border-radius: 2px;
+    margin: 0.5rem auto 0;
+    background: #818cf8;
+  }
+}

@@ -14,24 +14,22 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormInput from "@/shared/components/Form/form-input";
 import InputLabel from "@mui/material/InputLabel";
-import "./TransactionModal.component.scss";
+import { InvestmentCategory, InvestmentType } from "@/types";
+import "./InvestmentModal.component.scss";
 
-interface TransactionModalProps {
-  type: "income" | "expense";
+interface InvestmentModalProps {
   buttonText: string;
   title: string;
   triggerClassName?: string;
 }
 
-export default function TransactionModal({ type, buttonText, title, triggerClassName }: TransactionModalProps) {
+export default function InvestmentModal({ buttonText, title, triggerClassName }: InvestmentModalProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [categories, setCategories] = useState([]);
-  const [expenseTypes, setExpenseTypes] = useState([]);
-
-  const isIncome = type === "income";
+  const [categories, setCategories] = useState<InvestmentCategory[]>([]);
+  const [investmentTypes, setInvestmentTypes] = useState<InvestmentType[]>([]);
 
   const selectMenuProps = {
     PaperProps: {
@@ -62,76 +60,70 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
       },
     },
   };
-  const categoryEndpoint = "/expenses-category";
-  const expenseTypeEndpoint = "/expenses-type";
-  const submitEndpoint = isIncome ? "/incomes" : "/expenses";
 
   const initialValues = {
     description: "",
-    amount: "",
+    amount_invested: "",
+    current_value: "",
     date: dayjs(),
     categoryId: "",
     typeId: "",
+    ticker: "",
   };
 
   const validationSchema = Yup.object().shape({
     description: Yup.string()
       .max(50, "Descripción demasiado larga")
       .required("La descripción es requerida"),
-    amount: Yup.number()
-      .required("El monto es requerido")
-      .positive("Debe ser un monto positivo")
-      .integer(),
+    amount_invested: Yup.number()
+      .required("El monto invertido es requerido")
+      .positive("Debe ser un monto positivo"),
+    current_value: Yup.number()
+      .required("El valor actual es requerido")
+      .positive("Debe ser un monto positivo"),
     date: Yup.date().required("La fecha es requerida"),
-    categoryId: isIncome
-      ? Yup.mixed().notRequired()
-      : Yup.number().required("La categoría es requerida").integer(),
-    typeId: isIncome
-      ? Yup.mixed().notRequired()
-      : Yup.number().required("El tipo de gasto es requerido").integer(),
+    categoryId: Yup.number().required("La categoría es requerida").integer(),
+    typeId: Yup.number().required("El tipo de inversión es requerido").integer(),
+    ticker: Yup.string().optional(),
   });
 
   useEffect(() => {
-    if (!open || isIncome) return;
+    if (!open) return;
 
     const fetchCategories = async () => {
       try {
-        const { data } = await axios.get(categoryEndpoint);
+        const { data } = await axios.get("/investment-category");
         setCategories(data);
       } catch (error) {
         console.error("Error al obtener categorías:", error);
       }
     };
 
-    const fetchExpenseTypes = async () => {
+    const fetchTypes = async () => {
       try {
-        const { data } = await axios.get(expenseTypeEndpoint);
-        setExpenseTypes(data);
+        const { data } = await axios.get("/investment-type");
+        setInvestmentTypes(data);
       } catch (error) {
-        console.error("Error al obtener tipos de gasto:", error);
+        console.error("Error al obtener tipos de inversión:", error);
       }
     };
 
     fetchCategories();
-    fetchExpenseTypes();
-  }, [open, categoryEndpoint, isIncome]);
+    fetchTypes();
+  }, [open]);
 
-  const handleSubmit = async (values: any, { resetForm, setSubmitting }: any) => {
+  const handleSubmit = async (values: typeof initialValues, { resetForm, setSubmitting }: { resetForm: () => void; setSubmitting: (v: boolean) => void }) => {
     try {
-      const dataToSubmit = { ...values };
-      if (isIncome) {
-        delete dataToSubmit.categoryId;
-        delete dataToSubmit.typeId;
-      }
-
-      console.log(dataToSubmit)
-      await axios.post(submitEndpoint, dataToSubmit);
+      const dataToSubmit = {
+        ...values,
+        ticker: values.ticker || undefined,
+      };
+      await axios.post("/investments", dataToSubmit);
       resetForm();
       handleClose();
-      // Refrescamos para visualizar el elemento nuevo en la tabla (alternativa a Server Actions en Next js)
       window.location.reload();
     } catch (error) {
-      console.error(`Error al crear ${type}:`, error);
+      console.error("Error al crear la inversión:", error);
     } finally {
       setSubmitting(false);
     }
@@ -140,7 +132,7 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
   return (
     <>
       <Button
-        color={isIncome ? "success" : "error"}
+        color="primary"
         variant="contained"
         onClick={handleOpen}
         className={triggerClassName}
@@ -151,10 +143,10 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-title"
+        aria-labelledby="investment-modal-title"
       >
-        <div className={`transaction-modal-container animate-fade-in-up ${isIncome ? "transaction-modal--income" : "transaction-modal--expense"}`}>
-          <Typography id="modal-title" variant="h4" className="transaction-modal-title">
+        <div className="investment-modal-container animate-fade-in-up">
+          <Typography id="investment-modal-title" variant="h4" className="investment-modal-title">
             {title}
           </Typography>
 
@@ -182,14 +174,28 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
                 <div className="transaction-form-element">
                   <Field
                     className="w-full"
-                    label="Monto"
-                    name="amount"
+                    label="Monto Invertido"
+                    name="amount_invested"
                     type="number"
                     component={FormInput}
-                    value={values.amount}
+                    value={values.amount_invested}
                   />
                   <div className="form-error-message">
-                    <ErrorMessage name="amount" />
+                    <ErrorMessage name="amount_invested" />
+                  </div>
+                </div>
+
+                <div className="transaction-form-element">
+                  <Field
+                    className="w-full"
+                    label="Valor Actual"
+                    name="current_value"
+                    type="number"
+                    component={FormInput}
+                    value={values.current_value}
+                  />
+                  <div className="form-error-message">
+                    <ErrorMessage name="current_value" />
                   </div>
                 </div>
 
@@ -204,55 +210,62 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
                   />
                 </div>
 
-                {!isIncome && (
-                  <div className="transaction-form-element">
-                    <FormControl fullWidth>
-                      <InputLabel id="expense-type-select-label">Tipo de gasto</InputLabel>
-                      <Select
-                        labelId="expense-type-select-label"
-                        label="Tipo de gasto"
-                        name="typeId"
-                        value={values.typeId}
-                        onChange={handleChange}
-                        MenuProps={selectMenuProps}
-                      >
-                        {expenseTypes.map((expenseType: any) => (
-                          <MenuItem value={expenseType.id} key={expenseType.id}>
-                            {expenseType.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <div className="form-error-message">
-                      <ErrorMessage name="categoryId" />
-                    </div>
+                <div className="transaction-form-element">
+                  <FormControl fullWidth>
+                    <InputLabel id="investment-type-select-label">Tipo de inversión</InputLabel>
+                    <Select
+                      labelId="investment-type-select-label"
+                      label="Tipo de inversión"
+                      name="typeId"
+                      value={values.typeId}
+                      onChange={handleChange}
+                      MenuProps={selectMenuProps}
+                    >
+                      {investmentTypes.map((t) => (
+                        <MenuItem value={t.id} key={t.id}>
+                          {t.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <div className="form-error-message">
+                    <ErrorMessage name="typeId" />
                   </div>
-                )}
+                </div>
 
-                {!isIncome && (
-                  <div className="transaction-form-element">
-                    <FormControl fullWidth>
-                      <InputLabel id="category-select-label">Categoría</InputLabel>
-                      <Select
-                        labelId="category-select-label"
-                        label="Categoría"
-                        name="categoryId"
-                        value={values.categoryId}
-                        onChange={handleChange}
-                        MenuProps={selectMenuProps}
-                      >
-                        {categories.map((category: any) => (
-                          <MenuItem value={category.id} key={category.id}>
-                            {category.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                    <div className="form-error-message">
-                      <ErrorMessage name="categoryId" />
-                    </div>
+                <div className="transaction-form-element">
+                  <FormControl fullWidth>
+                    <InputLabel id="investment-category-select-label">Categoría</InputLabel>
+                    <Select
+                      labelId="investment-category-select-label"
+                      label="Categoría"
+                      name="categoryId"
+                      value={values.categoryId}
+                      onChange={handleChange}
+                      MenuProps={selectMenuProps}
+                    >
+                      {categories.map((c) => (
+                        <MenuItem value={c.id} key={c.id}>
+                          {c.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <div className="form-error-message">
+                    <ErrorMessage name="categoryId" />
                   </div>
-                )}
+                </div>
+
+                <div className="transaction-form-element">
+                  <Field
+                    className="w-full"
+                    label="Ticker (opcional)"
+                    name="ticker"
+                    type="text"
+                    component={FormInput}
+                    value={values.ticker}
+                  />
+                </div>
 
                 <div className="transaction-modal-actions">
                   <Button
@@ -273,7 +286,7 @@ export default function TransactionModal({ type, buttonText, title, triggerClass
                   <Button
                     size="large"
                     variant="contained"
-                    color={isIncome ? "success" : "error"}
+                    color="primary"
                     type="submit"
                     disabled={isSubmitting || !isValid}
                     className="btn-submit"

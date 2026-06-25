@@ -43,7 +43,7 @@ const ExpensesByTypeChart = ({ data }: Props) => {
                 <div className="mt-4 w-full">
                     <div className="grid grid-cols-2 gap-4">
                         {data.map((item, index) => (
-                            <div key={item.name} className="flex items-center space-x-2">
+                            <div key={`${item.name}-${index}`} className="flex items-center space-x-2">
                                 <span className="h-3 w-3 rounded-full flex-shrink-0" style={{ backgroundColor: colors[index] }} />
                                 <div className="flex flex-col">
                                     <span className="text-xs text-slate-400 uppercase font-semibold">{item.name}</span>

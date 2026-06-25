@@ -19,16 +19,22 @@ const Header = () => {
         Gastos
       </Link>
       <Link
+        className={`${styles["nav-link"]} ${pathname === "/incomes" ? styles["nav-link-active"] : ""}`}
+        href="/incomes"
+      >
+        Ingresos
+      </Link>
+      <Link
         className={`${styles.logo} ${pathname === "/" ? styles["logo-active"] : ""}`}
         href="/"
       >
         FinanzApp
       </Link>
       <Link
-        className={`${styles["nav-link"]} ${pathname === "/incomes" ? styles["nav-link-active"] : ""}`}
-        href="/incomes"
+        className={`${styles["nav-link"]} ${pathname === "/investments" ? styles["nav-link-active"] : ""}`}
+        href="/investments"
       >
-        Ingresos
+        Inversiones
       </Link>
       <button onClick={toggleCurrency} className={styles["currency-toggle"]}>
         {currency}

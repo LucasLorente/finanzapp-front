@@ -14,22 +14,26 @@ import Link from "next/link";
 import React from "react";
 import "./Card.styles.scss";
 import TransactionModal from "@/shared/components/Modal/TransactionModal.component";
+import InvestmentModal from "@/shared/components/Modal/InvestmentModal.component";
+
+type CardType = "income" | "expense" | "investment";
 
 const CardComponent = ({
   title,
   redirect,
-  total
+  total,
+  type,
 }: {
   title: string;
   redirect: string;
   total: number;
+  type?: CardType;
 }) => {
   const { formatAmount } = useCurrency();
-  const isIncome = title.toLowerCase() === "ingresos";
-  const typeClass = isIncome ? "income" : "expense";
+  const resolvedType: CardType = type ?? (title.toLowerCase() === "ingresos" ? "income" : "expense");
 
   return (
-    <Card className={`card-wrapper ${typeClass}`}>
+    <Card className={`card-wrapper ${resolvedType}`}>
       <CardContent className="card-content">
         <Box className="header-container">
           <Typography
@@ -44,7 +48,7 @@ const CardComponent = ({
         <Box className="total-container">
           <Typography
             variant="h3"
-            className={`main-total ${typeClass}`}
+            className={`main-total ${resolvedType}`}
           >
             {formatAmount(total || 0)}
           </Typography>
@@ -61,12 +65,20 @@ const CardComponent = ({
             Ver Detalles
           </Button>
         </Link>
-        <TransactionModal
-          type={isIncome ? "income" : "expense"}
-          buttonText={isIncome ? "Añadir Ingreso" : "Añadir Gasto"}
-          title={isIncome ? "Agregar Ingreso" : "Agregar Gasto"}
-          triggerClassName={`action-btn`}
-        />
+        {resolvedType === "investment" ? (
+          <InvestmentModal
+            buttonText="Añadir Inversión"
+            title="Agregar Inversión"
+            triggerClassName="action-btn"
+          />
+        ) : (
+          <TransactionModal
+            type={resolvedType === "income" ? "income" : "expense"}
+            buttonText={resolvedType === "income" ? "Añadir Ingreso" : "Añadir Gasto"}
+            title={resolvedType === "income" ? "Agregar Ingreso" : "Agregar Gasto"}
+            triggerClassName={`action-btn`}
+          />
+        )}
       </CardActions>
     </Card>
   );

@@ -43,43 +43,6 @@
                 0 -2px 20px rgba(251, 113, 133, 0.08);
   }
 
-  // Dark Select dropdown — rendered in-modal via disablePortal
-  .MuiMenu-paper,
-  .MuiPopover-paper {
-    background-color: #161c2d !important;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
-  }
-
-  .MuiMenuItem-root {
-    color: #cbd5e1 !important;
-    font-size: 0.925rem;
-
-    &:hover {
-      background-color: rgba(96, 165, 250, 0.1) !important;
-      color: #f1f5f9 !important;
-    }
-
-    &.Mui-selected {
-      background-color: rgba(96, 165, 250, 0.15) !important;
-      color: #60a5fa !important;
-
-      &:hover {
-        background-color: rgba(96, 165, 250, 0.2) !important;
-      }
-    }
-  }
-
-  .MuiMenu-paper::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  .MuiMenu-paper::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
-  }
-
   @media (max-width: 480px) {
     padding: 1.5rem 1.25rem;
     width: 95%;

@@ -14,6 +14,10 @@
         border-color: rgba(251, 113, 133, 0.25) !important;
     }
 
+    &.investment {
+        border-color: rgba(129, 140, 248, 0.3) !important;
+    }
+
     &.positive {
         border-color: rgba(98, 144, 200, 0.35) !important;
     }
@@ -70,6 +74,11 @@
         color: #fb7185;
     }
 
+    &.investment {
+        background-color: rgba(129, 140, 248, 0.12);
+        color: #818cf8;
+    }
+
     &.positive {
         background-color: rgba(98, 144, 200, 0.12);
         color: #6290C8;
@@ -101,6 +110,10 @@
 
     &.expense {
         color: #fb7185 !important;
+    }
+
+    &.investment {
+        color: #818cf8 !important;
     }
 
     &.positive {
