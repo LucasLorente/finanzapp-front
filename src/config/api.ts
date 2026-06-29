@@ -2,7 +2,7 @@ import axios from "axios";
 import { getClientAuthToken } from "@/lib/auth";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000",
+  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000",
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
