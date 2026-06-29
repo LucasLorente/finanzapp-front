@@ -2,10 +2,12 @@ import axios from "@/config/api";
 import { Investment, InvestmentCategory, InvestmentType } from "@/types";
 import { DateRange, getDefaultDateRange } from "@/utils/date";
 
-const fetchInvestments = async (dateRange?: DateRange): Promise<Investment[]> => {
+type Headers = Record<string, string>;
+
+const fetchInvestments = async (dateRange?: DateRange, headers?: Headers): Promise<Investment[]> => {
   try {
     const { startDate, endDate } = dateRange ?? getDefaultDateRange();
-    const { data: investments } = await axios.get("/investments", { params: { startDate, endDate } });
+    const { data: investments } = await axios.get("/investments", { params: { startDate, endDate }, headers });
     return investments;
   } catch (error) {
     console.error("Error al obtener inversiones:", error);
@@ -13,10 +15,10 @@ const fetchInvestments = async (dateRange?: DateRange): Promise<Investment[]> =>
   }
 };
 
-const fetchTotalInvestments = async (dateRange?: DateRange): Promise<number> => {
+const fetchTotalInvestments = async (dateRange?: DateRange, headers?: Headers): Promise<number> => {
   try {
     const { startDate, endDate } = dateRange ?? getDefaultDateRange();
-    const { data: total } = await axios.get("/investments/total", { params: { startDate, endDate } });
+    const { data: total } = await axios.get("/investments/total", { params: { startDate, endDate }, headers });
 
     if (total && total._sum) {
       return total._sum.current_value ?? 0;
@@ -30,9 +32,9 @@ const fetchTotalInvestments = async (dateRange?: DateRange): Promise<number> => 
   }
 };
 
-const fetchInvestmentCategories = async (): Promise<InvestmentCategory[]> => {
+const fetchInvestmentCategories = async (headers?: Headers): Promise<InvestmentCategory[]> => {
   try {
-    const { data: categories } = await axios.get("/investment-category");
+    const { data: categories } = await axios.get("/investment-category", { headers });
     return categories;
   } catch (error) {
     console.error("Error al obtener las categorías de inversión:", error);
@@ -40,9 +42,9 @@ const fetchInvestmentCategories = async (): Promise<InvestmentCategory[]> => {
   }
 };
 
-const fetchInvestmentTypes = async (): Promise<InvestmentType[]> => {
+const fetchInvestmentTypes = async (headers?: Headers): Promise<InvestmentType[]> => {
   try {
-    const { data: types } = await axios.get("/investment-type");
+    const { data: types } = await axios.get("/investment-type", { headers });
     return types;
   } catch (error) {
     console.error("Error al obtener los tipos de inversión:", error);

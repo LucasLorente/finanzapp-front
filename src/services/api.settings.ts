@@ -1,11 +1,13 @@
 import axios from "@/config/api";
 import { ExpenseCategory, ExpenseType, InvestmentCategory, InvestmentType } from "@/types";
 
+type Headers = Record<string, string>;
+
 // ── Expense Categories ──────────────────────────────────────────────────────
 
-const fetchExpenseCategories = async (): Promise<ExpenseCategory[]> => {
+const fetchExpenseCategories = async (headers?: Headers): Promise<ExpenseCategory[]> => {
   try {
-    const { data } = await axios.get("/expenses-category");
+    const { data } = await axios.get("/expenses-category", { headers });
     return data;
   } catch (error) {
     console.error("Error al obtener las categorías de gastos:", error);
@@ -44,9 +46,9 @@ const deleteExpenseCategory = async (id: number): Promise<void> => {
 
 // ── Expense Types ───────────────────────────────────────────────────────────
 
-const fetchExpenseTypes = async (): Promise<ExpenseType[]> => {
+const fetchExpenseTypes = async (headers?: Headers): Promise<ExpenseType[]> => {
   try {
-    const { data } = await axios.get("/expenses-type");
+    const { data } = await axios.get("/expenses-type", { headers });
     return data;
   } catch (error) {
     console.error("Error al obtener los tipos de gasto:", error);
@@ -85,9 +87,9 @@ const deleteExpenseType = async (id: number): Promise<void> => {
 
 // ── Investment Categories ───────────────────────────────────────────────────
 
-const fetchInvestmentCategories = async (): Promise<InvestmentCategory[]> => {
+const fetchInvestmentCategories = async (headers?: Headers): Promise<InvestmentCategory[]> => {
   try {
-    const { data } = await axios.get("/investment-category");
+    const { data } = await axios.get("/investment-category", { headers });
     return data;
   } catch (error) {
     console.error("Error al obtener las categorías de inversión:", error);
@@ -126,9 +128,9 @@ const deleteInvestmentCategory = async (id: number): Promise<void> => {
 
 // ── Investment Types ────────────────────────────────────────────────────────
 
-const fetchInvestmentTypes = async (): Promise<InvestmentType[]> => {
+const fetchInvestmentTypes = async (headers?: Headers): Promise<InvestmentType[]> => {
   try {
-    const { data } = await axios.get("/investment-type");
+    const { data } = await axios.get("/investment-type", { headers });
     return data;
   } catch (error) {
     console.error("Error al obtener los tipos de inversión:", error);

@@ -1,14 +1,21 @@
 "use client";
 
 import { useCurrency } from "@/context/CurrencyContext";
+import { removeAuthToken } from "@/lib/auth";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import styles from "./Header.styles.module.scss";
 
 const Header = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const { currency, toggleCurrency } = useCurrency();
+
+  const handleLogout = () => {
+    removeAuthToken();
+    router.push("/login");
+  };
 
   return (
     <div className={`sticky top-0 z-50 min-h-20 flex justify-around items-center ${styles.header}`}>
@@ -44,6 +51,9 @@ const Header = () => {
       </Link>
       <button onClick={toggleCurrency} className={styles["currency-toggle"]}>
         {currency}
+      </button>
+      <button onClick={handleLogout} className={styles["logout-btn"]}>
+        Salir
       </button>
     </div>
   );

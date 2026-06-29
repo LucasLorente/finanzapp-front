@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { Suspense } from "react";
 import InvestmentsList from "./components/investments-list";
 import {
@@ -18,11 +19,15 @@ export default async function Investments({
   const { month } = await searchParams;
   const dateRange = month ? getDateRangeForMonth(month) : getDefaultDateRange();
 
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth_token")?.value;
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+
   const [investments, total, categories, types] = await Promise.all([
-    fetchInvestments(dateRange),
-    fetchTotalInvestments(dateRange),
-    fetchInvestmentCategories(),
-    fetchInvestmentTypes(),
+    fetchInvestments(dateRange, authHeaders),
+    fetchTotalInvestments(dateRange, authHeaders),
+    fetchInvestmentCategories(authHeaders),
+    fetchInvestmentTypes(authHeaders),
   ]);
 
   return (

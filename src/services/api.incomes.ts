@@ -2,10 +2,12 @@ import axios from "@/config/api";
 import { Expense } from "@/types";
 import { DateRange, getDefaultDateRange } from "@/utils/date";
 
-const fetchIncomes = async (dateRange?: DateRange): Promise<Expense[]> => {
+type Headers = Record<string, string>;
+
+const fetchIncomes = async (dateRange?: DateRange, headers?: Headers): Promise<Expense[]> => {
   try {
     const { startDate, endDate } = dateRange ?? getDefaultDateRange();
-    const { data: incomes } = await axios.get("/incomes", { params: { startDate, endDate } });
+    const { data: incomes } = await axios.get("/incomes", { params: { startDate, endDate }, headers });
     return incomes;
   } catch (error) {
     console.error("Error al obtener gastos:", error);
@@ -13,10 +15,10 @@ const fetchIncomes = async (dateRange?: DateRange): Promise<Expense[]> => {
   }
 };
 
-const fetchTotalIncomes = async (dateRange?: DateRange): Promise<number> => {
+const fetchTotalIncomes = async (dateRange?: DateRange, headers?: Headers): Promise<number> => {
   try {
     const { startDate, endDate } = dateRange ?? getDefaultDateRange();
-    const { data: total } = await axios.get("/incomes/total", { params: { startDate, endDate } });
+    const { data: total } = await axios.get("/incomes/total", { params: { startDate, endDate }, headers });
 
     if (total && total._sum) {
       return total._sum.amount;
@@ -30,10 +32,10 @@ const fetchTotalIncomes = async (dateRange?: DateRange): Promise<number> => {
   }
 };
 
-const fetchWeeklyIncomes = async (dateRange?: DateRange): Promise<number> => {
+const fetchWeeklyIncomes = async (dateRange?: DateRange, headers?: Headers): Promise<number> => {
   try {
     const { startDate, endDate } = dateRange ?? getDefaultDateRange();
-    const { data: weekly } = await axios.get("/incomes/weekly", { params: { startDate, endDate } });
+    const { data: weekly } = await axios.get("/incomes/weekly", { params: { startDate, endDate }, headers });
 
     if (weekly && weekly._sum) {
       return weekly._sum.amount;
@@ -47,10 +49,10 @@ const fetchWeeklyIncomes = async (dateRange?: DateRange): Promise<number> => {
   }
 };
 
-const fetchMonthlyIncomes = async (dateRange?: DateRange): Promise<number> => {
+const fetchMonthlyIncomes = async (dateRange?: DateRange, headers?: Headers): Promise<number> => {
   try {
     const { startDate, endDate } = dateRange ?? getDefaultDateRange();
-    const { data: monthly } = await axios.get("/incomes/monthly", { params: { startDate, endDate } });
+    const { data: monthly } = await axios.get("/incomes/monthly", { params: { startDate, endDate }, headers });
 
     if (monthly && monthly._sum) {
       return monthly._sum.amount;

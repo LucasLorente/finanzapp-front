@@ -1,10 +1,9 @@
+import { cookies } from "next/headers";
 import { Suspense } from "react";
 import IncomesList from "./components/incomes-list";
 import {
   fetchIncomes,
-  fetchMonthlyIncomes,
   fetchTotalIncomes,
-  fetchWeeklyIncomes,
 } from "@/services/api.incomes";
 import TransactionModal from "@/shared/components/Modal/TransactionModal.component";
 import MonthSelector from "@/shared/components/MonthSelector/MonthSelector.component";
@@ -18,9 +17,13 @@ export default async function Incomes({
   const { month } = await searchParams;
   const dateRange = month ? getDateRangeForMonth(month) : getDefaultDateRange();
 
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth_token")?.value;
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+
   const [incomes, total] = await Promise.all([
-    fetchIncomes(dateRange),
-    fetchTotalIncomes(dateRange)
+    fetchIncomes(dateRange, authHeaders),
+    fetchTotalIncomes(dateRange, authHeaders),
   ]);
 
   return (

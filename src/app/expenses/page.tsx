@@ -1,12 +1,11 @@
+import { cookies } from "next/headers";
 import { Suspense } from "react";
 import ExpensesList from "./components/expenses-list";
 import {
   fetchExpenses,
   fetchExpensesCategories,
   fetchExpensesTypes,
-  fetchMonthlyExpenses,
   fetchTotalExpenses,
-  fetchWeeklyExpenses,
 } from "@/services/api.expenses";
 import TransactionModal from "@/shared/components/Modal/TransactionModal.component";
 import MonthSelector from "@/shared/components/MonthSelector/MonthSelector.component";
@@ -20,11 +19,15 @@ export default async function Expenses({
   const { month } = await searchParams;
   const dateRange = month ? getDateRangeForMonth(month) : getDefaultDateRange();
 
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth_token")?.value;
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+
   const [expenses, total, categories, types] = await Promise.all([
-    fetchExpenses(dateRange),
-    fetchTotalExpenses(dateRange),
-    fetchExpensesCategories(),
-    fetchExpensesTypes(),
+    fetchExpenses(dateRange, authHeaders),
+    fetchTotalExpenses(dateRange, authHeaders),
+    fetchExpensesCategories(authHeaders),
+    fetchExpensesTypes(authHeaders),
   ]);
 
   return (

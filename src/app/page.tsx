@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import ExpensesByTypeChart from "@/app/components/ExpensesByTypeChart";
 import ExpensesByCategoryChart from "@/app/components/ExpensesByCategoryChart";
 import {
@@ -23,6 +24,10 @@ export default async function HomePage({
   const { month } = await searchParams;
   const dateRange = month ? getDateRangeForMonth(month) : getDefaultDateRange();
 
+  const cookieStore = await cookies();
+  const token = cookieStore.get("auth_token")?.value;
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+
   const [
     totalExpenses,
     totalIncomes,
@@ -30,11 +35,11 @@ export default async function HomePage({
     expensesByType,
     expensesByCategory,
   ] = await Promise.all([
-    fetchTotalExpenses(dateRange),
-    fetchTotalIncomes(dateRange),
-    fetchTotalInvestments(dateRange),
-    fetchExpensesByType(dateRange),
-    fetchExpensesByCategory(dateRange),
+    fetchTotalExpenses(dateRange, authHeaders),
+    fetchTotalIncomes(dateRange, authHeaders),
+    fetchTotalInvestments(dateRange, authHeaders),
+    fetchExpensesByType(dateRange, authHeaders),
+    fetchExpensesByCategory(dateRange, authHeaders),
   ]);
 
   const totalBalance = totalIncomes - totalExpenses;
