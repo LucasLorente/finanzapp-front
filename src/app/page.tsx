@@ -26,7 +26,7 @@ export default async function HomePage({
 
   const cookieStore = await cookies();
   const token = cookieStore.get("auth_token")?.value;
-  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : undefined;
 
   const [
     totalExpenses,

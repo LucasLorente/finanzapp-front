@@ -21,7 +21,7 @@ export default async function Expenses({
 
   const cookieStore = await cookies();
   const token = cookieStore.get("auth_token")?.value;
-  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : undefined;
 
   const [expenses, total, categories, types] = await Promise.all([
     fetchExpenses(dateRange, authHeaders),

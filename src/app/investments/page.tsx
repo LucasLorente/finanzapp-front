@@ -21,7 +21,7 @@ export default async function Investments({
 
   const cookieStore = await cookies();
   const token = cookieStore.get("auth_token")?.value;
-  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : undefined;
 
   const [investments, total, categories, types] = await Promise.all([
     fetchInvestments(dateRange, authHeaders),

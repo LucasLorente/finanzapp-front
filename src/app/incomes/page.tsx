@@ -19,7 +19,7 @@ export default async function Incomes({
 
   const cookieStore = await cookies();
   const token = cookieStore.get("auth_token")?.value;
-  const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+  const authHeaders = token ? { Authorization: `Bearer ${token}` } : undefined;
 
   const [incomes, total] = await Promise.all([
     fetchIncomes(dateRange, authHeaders),
