@@ -6,7 +6,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-import Header from "@/shared/components/Header/Header.component";
+import ConditionalHeader from "@/shared/components/Header/ConditionalHeader";
 
 export const metadata: Metadata = {
   title: "Finanzapp",
@@ -30,7 +30,7 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <Providers dolarRate={dolarRate}>
-          <Header />
+          <ConditionalHeader />
           <div className="flex flex-col min-h-screen">
             <div className="flex-grow">
               <main className="flex flex-col w-full">
