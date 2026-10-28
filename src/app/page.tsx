@@ -48,7 +48,7 @@ export default async function HomePage({
     fetchPendingRecurring("income", dateRange, authHeaders).catch(() => []),
   ]);
 
-  const totalBalance = totalIncomes - totalExpenses;
+  const totalBalance = totalIncomes - (totalExpenses + totalInvestments);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
