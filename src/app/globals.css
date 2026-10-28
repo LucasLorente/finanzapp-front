@@ -6,6 +6,17 @@
 @theme {
 }
 
+:root {
+    --color-surface: #161c2d;
+    --color-surface-alt: #1a2236;
+    --color-border: rgba(255, 255, 255, 0.08);
+    --color-text: #f1f5f9;
+    --color-muted: #94a3b8;
+    --color-accent: #6290C8;
+    --color-accent-soft: rgba(98, 144, 200, 0.15);
+    --color-danger: #fb7185;
+}
+
 body {
     background-color: #0d1117;
     color: #fff;

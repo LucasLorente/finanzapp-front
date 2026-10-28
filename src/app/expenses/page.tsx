@@ -7,8 +7,10 @@ import {
   fetchExpensesTypes,
   fetchTotalExpenses,
 } from "@/services/api.expenses";
+import { fetchPendingRecurring } from "@/services/api.recurring";
 import TransactionModal from "@/shared/components/Modal/TransactionModal.component";
 import MonthSelector from "@/shared/components/MonthSelector/MonthSelector.component";
+import PendingRecurring from "@/shared/components/PendingRecurring/PendingRecurring.component";
 import { getDefaultDateRange, getDateRangeForMonth } from "@/utils/date";
 
 export default async function Expenses({
@@ -23,11 +25,12 @@ export default async function Expenses({
   const token = cookieStore.get("auth_token")?.value;
   const authHeaders = token ? { Authorization: `Bearer ${token}` } : undefined;
 
-  const [expenses, total, categories, types] = await Promise.all([
+  const [expenses, total, categories, types, pendingRecurring] = await Promise.all([
     fetchExpenses(dateRange, authHeaders),
     fetchTotalExpenses(dateRange, authHeaders),
     fetchExpensesCategories(authHeaders),
     fetchExpensesTypes(authHeaders),
+    fetchPendingRecurring("expense", dateRange, authHeaders),
   ]);
 
   return (
@@ -35,6 +38,12 @@ export default async function Expenses({
       <Suspense fallback={null}>
         <MonthSelector />
       </Suspense>
+      <PendingRecurring
+        key={dateRange.startDate}
+        kind="expense"
+        items={pendingRecurring}
+        monthDate={dateRange.startDate}
+      />
       <ExpensesList
         categories={categories}
         types={types}

@@ -16,8 +16,17 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
-import { ExpenseCategory, ExpenseType, InvestmentCategory, InvestmentType } from "@/types";
+import {
+  ExpenseCategory,
+  ExpenseType,
+  InvestmentCategory,
+  InvestmentType,
+  RecurringKind,
+  RecurringTransaction,
+} from "@/types";
 import CategoryModal from "./category-modal";
+import RecurringModal from "./recurring-modal";
+import RecurringTable from "./recurring-table";
 import styles from "./settings-list.module.scss";
 
 interface SettingsListProps {
@@ -25,6 +34,8 @@ interface SettingsListProps {
   expenseTypes: ExpenseType[];
   investmentCategories: InvestmentCategory[];
   investmentTypes: InvestmentType[];
+  recurringExpenses: RecurringTransaction[];
+  recurringIncomes: RecurringTransaction[];
 }
 
 type EntityRow = { id: number; name: string };
@@ -34,6 +45,14 @@ interface TabConfig {
   endpoint: string;
   rows: EntityRow[];
 }
+
+interface RecurringTabConfig {
+  label: string;
+  kind: RecurringKind;
+  rows: RecurringTransaction[];
+}
+
+const RECURRING_ENDPOINT = "/recurring";
 
 const tabSx = {
   color: "#94a3b8",
@@ -68,12 +87,18 @@ export default function SettingsList({
   expenseTypes,
   investmentCategories,
   investmentTypes,
+  recurringExpenses,
+  recurringIncomes,
 }: SettingsListProps) {
   const [activeTab, setActiveTab] = useState(0);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalEndpoint, setModalEndpoint] = useState("");
   const [editRow, setEditRow] = useState<EntityRow | undefined>(undefined);
+
+  const [recurringModalOpen, setRecurringModalOpen] = useState(false);
+  const [recurringKind, setRecurringKind] = useState<RecurringKind>("expense");
+  const [editRecurring, setEditRecurring] = useState<RecurringTransaction | undefined>(undefined);
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<{ endpoint: string; row: EntityRow } | null>(null);
@@ -85,6 +110,17 @@ export default function SettingsList({
     { label: "Categorías de Inversiones", endpoint: "/investment-category", rows: investmentCategories },
     { label: "Tipos de Inversiones", endpoint: "/investment-type", rows: investmentTypes },
   ];
+
+  const recurringTabs: RecurringTabConfig[] = [
+    { label: "Gastos Recurrentes", kind: "expense", rows: recurringExpenses },
+    { label: "Ingresos Recurrentes", kind: "income", rows: recurringIncomes },
+  ];
+
+  const openRecurringModal = (kind: RecurringKind, row?: RecurringTransaction) => {
+    setRecurringKind(kind);
+    setEditRecurring(row);
+    setRecurringModalOpen(true);
+  };
 
   const openCreate = (endpoint: string) => {
     setEditRow(undefined);
@@ -131,8 +167,8 @@ export default function SettingsList({
         variant="scrollable"
         scrollButtons="auto"
       >
-        {tabs.map((tab) => (
-          <Tab key={tab.endpoint} label={tab.label} sx={tabSx} />
+        {[...tabs, ...recurringTabs].map((tab) => (
+          <Tab key={tab.label} label={tab.label} sx={tabSx} />
         ))}
       </Tabs>
 
@@ -214,12 +250,67 @@ export default function SettingsList({
         </div>
       ))}
 
+      {recurringTabs.map((tab, i) => {
+        const index = tabs.length + i;
+        return (
+          <div key={tab.kind} hidden={activeTab !== index} className={styles.tabPanel}>
+            {activeTab === index && (
+              <>
+                <div className={styles.panelHeader}>
+                  <span className={styles.panelTitle}>{tab.label}</span>
+                  <Button
+                    variant="contained"
+                    onClick={() => openRecurringModal(tab.kind)}
+                    sx={{
+                      borderRadius: "12px",
+                      fontWeight: 800,
+                      textTransform: "none",
+                      fontSize: "1rem",
+                      padding: "10px",
+                    }}
+                  >
+                    + Agregar
+                  </Button>
+                </div>
+
+                <div className={styles.tableWrapper}>
+                  {tab.rows.length === 0 ? (
+                    <div className={styles.emptyState}>
+                      Sin recurrentes. Cada mes vas a poder confirmarlos desde{" "}
+                      {tab.kind === "expense" ? "Gastos" : "Ingresos"}.
+                    </div>
+                  ) : (
+                    <RecurringTable
+                      rows={tab.rows}
+                      categories={expenseCategories}
+                      types={expenseTypes}
+                      onEdit={(row) => openRecurringModal(tab.kind, row)}
+                      onDelete={(row) => openDelete(RECURRING_ENDPOINT, { id: row.id, name: row.description })}
+                    />
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        );
+      })}
+
       <CategoryModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         onSaved={() => window.location.reload()}
         endpoint={modalEndpoint}
         initialValues={editRow}
+      />
+
+      <RecurringModal
+        open={recurringModalOpen}
+        onClose={() => setRecurringModalOpen(false)}
+        onSaved={() => window.location.reload()}
+        kind={recurringKind}
+        categories={expenseCategories}
+        types={expenseTypes}
+        initialValues={editRecurring}
       />
 
       <Dialog
@@ -238,6 +329,8 @@ export default function SettingsList({
         <DialogContent>
           <DialogContentText sx={{ color: "#94a3b8" }}>
             ¿Eliminar &quot;{deleteTarget?.row.name}&quot;? Esta acción no se puede deshacer.
+            {deleteTarget?.endpoint === RECURRING_ENDPOINT &&
+              " Los gastos/ingresos ya registrados desde este recurrente se conservan."}
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{ padding: "1rem 1.5rem" }}>

@@ -5,8 +5,10 @@ import {
   fetchIncomes,
   fetchTotalIncomes,
 } from "@/services/api.incomes";
+import { fetchPendingRecurring } from "@/services/api.recurring";
 import TransactionModal from "@/shared/components/Modal/TransactionModal.component";
 import MonthSelector from "@/shared/components/MonthSelector/MonthSelector.component";
+import PendingRecurring from "@/shared/components/PendingRecurring/PendingRecurring.component";
 import { getDefaultDateRange, getDateRangeForMonth } from "@/utils/date";
 
 export default async function Incomes({
@@ -21,9 +23,10 @@ export default async function Incomes({
   const token = cookieStore.get("auth_token")?.value;
   const authHeaders = token ? { Authorization: `Bearer ${token}` } : undefined;
 
-  const [incomes, total] = await Promise.all([
+  const [incomes, total, pendingRecurring] = await Promise.all([
     fetchIncomes(dateRange, authHeaders),
     fetchTotalIncomes(dateRange, authHeaders),
+    fetchPendingRecurring("income", dateRange, authHeaders),
   ]);
 
   return (
@@ -31,6 +34,12 @@ export default async function Incomes({
       <Suspense fallback={null}>
         <MonthSelector />
       </Suspense>
+      <PendingRecurring
+        key={dateRange.startDate}
+        kind="income"
+        items={pendingRecurring}
+        monthDate={dateRange.startDate}
+      />
       <IncomesList
         incomes={incomes}
         total={total}

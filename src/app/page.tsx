@@ -10,9 +10,11 @@ import {
   fetchTotalIncomes,
 } from "@/services/api.incomes";
 import { fetchTotalInvestments } from "@/services/api.investments";
+import { fetchPendingRecurring } from "@/services/api.recurring";
 import CardComponent from "@/shared/components/Card/Card.component";
 import BalanceCard from "@/shared/components/Card/BalanceCard.component";
 import MonthSelector from "@/shared/components/MonthSelector/MonthSelector.component";
+import PendingRecurring from "@/shared/components/PendingRecurring/PendingRecurring.component";
 import { getDefaultDateRange, getDateRangeForMonth } from "@/utils/date";
 import { Suspense } from "react";
 
@@ -34,12 +36,16 @@ export default async function HomePage({
     totalInvestments,
     expensesByType,
     expensesByCategory,
+    pendingExpenses,
+    pendingIncomes,
   ] = await Promise.all([
     fetchTotalExpenses(dateRange, authHeaders),
     fetchTotalIncomes(dateRange, authHeaders),
     fetchTotalInvestments(dateRange, authHeaders),
     fetchExpensesByType(dateRange, authHeaders),
     fetchExpensesByCategory(dateRange, authHeaders),
+    fetchPendingRecurring("expense", dateRange, authHeaders).catch(() => []),
+    fetchPendingRecurring("income", dateRange, authHeaders).catch(() => []),
   ]);
 
   const totalBalance = totalIncomes - totalExpenses;
@@ -50,6 +56,19 @@ export default async function HomePage({
       <Suspense fallback={null}>
         <MonthSelector />
       </Suspense>
+
+      <PendingRecurring
+        key={`income-${dateRange.startDate}`}
+        kind="income"
+        items={pendingIncomes}
+        monthDate={dateRange.startDate}
+      />
+      <PendingRecurring
+        key={`expense-${dateRange.startDate}`}
+        kind="expense"
+        items={pendingExpenses}
+        monthDate={dateRange.startDate}
+      />
 
       <div className="mb-6">
         <BalanceCard total={totalBalance} />

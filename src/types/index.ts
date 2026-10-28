@@ -15,6 +15,23 @@ export interface Expense {
   date: Date;
   type_id: number;
   category_id: number;
+  recurring_id?: number | null;
+  created_at?: Date;
+  updated_at?: Date;
+}
+
+export type RecurringKind = "expense" | "income";
+
+export interface RecurringTransaction {
+  id: number;
+  kind: RecurringKind;
+  description: string;
+  amount: number;
+  day_of_month: number;
+  start_date: Date;
+  active: boolean;
+  category_id: number | null;
+  type_id: number | null;
   created_at?: Date;
   updated_at?: Date;
 }

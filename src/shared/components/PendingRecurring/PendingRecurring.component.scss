@@ -1,0 +1,120 @@
+.pending-recurring {
+  background: linear-gradient(145deg, #161c2d, #1a2236);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 3px solid #6290C8;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+
+  &--expense {
+    border-left-color: #fb7185;
+  }
+
+  &--income {
+    border-left-color: #4ade80;
+  }
+}
+
+.pending-recurring-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pending-recurring-title {
+  color: #f1f5f9;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 2px;
+}
+
+.pending-recurring-subtitle {
+  color: #64748b;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.pending-recurring-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pending-recurring-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.pending-recurring-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.pending-recurring-description {
+  color: #e2e8f0;
+  font-weight: 500;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pending-recurring-date {
+  color: #64748b;
+  font-size: 0.75rem;
+}
+
+.pending-recurring-amount {
+  width: 160px;
+  flex-shrink: 0;
+
+  .MuiInputBase-root {
+    background-color: rgba(13, 17, 23, 0.6);
+    color: #ffffff;
+    border-radius: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .MuiInputAdornment-root p {
+    color: #64748b;
+  }
+
+  fieldset {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .MuiInputBase-root:hover fieldset {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+@media (max-width: 600px) {
+  .pending-recurring-header {
+    flex-direction: column;
+  }
+
+  .pending-recurring-row {
+    flex-wrap: wrap;
+  }
+
+  .pending-recurring-info {
+    flex-basis: 100%;
+  }
+
+  .pending-recurring-amount {
+    flex: 1;
+  }
+}
